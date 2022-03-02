@@ -2,35 +2,31 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(CharacterController))]
 public abstract class AgentController : MonoBehaviour
 {    
     [SerializeField] private float speed = 500;
     [SerializeField] private float rotSpeed = 300;
-    private Rigidbody rb;
-    private Vector3 deltaPosition;
-    private Vector3 deltaRotation;
+    private float gravity = 9.81f;
+    private CharacterController _cc;
 
     // Start is called before the first frame update
     void Start()
     {
-        rb = GetComponent<Rigidbody>();
-        deltaPosition = new Vector3(0,0,0);
-        deltaRotation = new Vector3(0,0,0);
+        _cc = GetComponent<CharacterController>();
     }
 
     void Update()
     {
-        deltaPosition.Set(0, 0, GetDeltaPosition());
-        deltaRotation.Set(0, GetDeltaRotation(), 0);
+        float currentSpeed = GetInputVertical() * speed;
+        float rotation = GetInputHorizontal() * rotSpeed;
+        transform.Rotate(0, rotation * Time.deltaTime,0); // application de la rotation
+        Vector3 dir = transform.forward * currentSpeed;
+        dir -= new Vector3(0, gravity, 0); // prise en compte de la gravité
+        _cc.SimpleMove(dir  * Time.deltaTime); // application du déplacement
     }
 
-    void FixedUpdate()
-    {
-        rb.velocity = rb.rotation * (deltaPosition * speed * Time.fixedDeltaTime);
-        rb.MoveRotation(rb.rotation * Quaternion.Euler(deltaRotation * rotSpeed * Time.fixedDeltaTime));
-    }
+    protected abstract float GetInputVertical();
 
-    protected abstract float GetDeltaPosition();
-
-    protected abstract float GetDeltaRotation();
+    protected abstract float GetInputHorizontal();
 }

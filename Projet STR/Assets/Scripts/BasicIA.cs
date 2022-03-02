@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class BasicIA : AgentController
 {
-    protected override float GetDeltaPosition()
+    protected override float GetInputVertical()
     {
         throw new System.NotImplementedException();
     }
 
-    protected override float GetDeltaRotation()
+    protected override float GetInputHorizontal()
     {
         throw new System.NotImplementedException();
     }

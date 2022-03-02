@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class PlayerController : AgentController
 {
-    protected override float GetDeltaPosition()
+    protected override float GetInputVertical()
     {
         return Input.GetAxis("Vertical");
     }
 
-    protected override float GetDeltaRotation()
+    protected override float GetInputHorizontal()
     {
         return Input.GetAxis("Horizontal");
     }
