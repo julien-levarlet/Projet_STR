@@ -4,12 +4,22 @@ using UnityEngine;
 
 public class PlayerController : AgentController
 {
-    protected override float GetDeltaPosition()
+    /// <summary>
+    /// Retourne la valeur de l'axe vertical du clavier
+    /// </summary>
+    /// <seealso cref="AgentController.GetInputVertical"/>
+    /// <returns></returns>
+    protected override float GetInputVertical()
     {
         return Input.GetAxis("Vertical");
     }
-
-    protected override float GetDeltaRotation()
+    
+    /// <summary>
+    /// Retourne la valeur de l'axe vertical du clavier
+    /// </summary>
+    /// <seealso cref="AgentController.GetInputHorizontal"/>
+    /// <returns></returns>
+    protected override float GetInputHorizontal()
     {
         return Input.GetAxis("Horizontal");
     }
