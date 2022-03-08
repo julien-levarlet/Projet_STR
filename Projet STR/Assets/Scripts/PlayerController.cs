@@ -11,7 +11,9 @@ public class PlayerController : AgentController
     /// <returns></returns>
     protected override float GetInputVertical()
     {
-        return Input.GetAxis("Vertical");
+        if (Input.GetKey(KeyCode.DownArrow))
+            return -1;
+        return Input.GetKey(KeyCode.UpArrow) ? 1 : 0;
     }
     
     /// <summary>
@@ -21,6 +23,8 @@ public class PlayerController : AgentController
     /// <returns></returns>
     protected override float GetInputHorizontal()
     {
-        return Input.GetAxis("Horizontal");
+        if (Input.GetKey(KeyCode.RightArrow))
+            return 1;
+        return Input.GetKey(KeyCode.LeftArrow) ? -1 : 0;
     }
 }

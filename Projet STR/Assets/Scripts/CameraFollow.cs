@@ -1,12 +1,15 @@
 using UnityEngine;
 
+/// <summary>
+/// Mouvements de camera suivant un objet
+/// </summary>
 public class CameraFollow : MonoBehaviour
 {
-    public Transform target;
+    [SerializeField] private Transform target;
 
     //vitesse de suivi de la caméra
-    public float smoothSpeed = 0.125f;
-    public Vector3 offset;
+    [SerializeField] private float smoothSpeed = 0.125f;
+    [SerializeField] private Vector3 offset = new Vector3(-5, 1, 0);
     void FixedUpdate()
     {
         Vector3 desiredPosition = target.position + offset;

@@ -2,22 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Mouvements de camera en vue du dessus en utilisant les mouvements de la souris et les touches wasd
+/// </summary>
 public class CameraController : MonoBehaviour
 {
-
     public float panSpeed = 20f;
     public float panBorderThickness = 10f;
-    public Vector2 panLimit;
+    public Vector2 panLimit = new Vector2(30,30);
     public float minY = 0f;
     public float maxY = 100f;
     public float scrollSpeed = 20f;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
-    // Update is called once per frame
     void Update()
     {
         Vector3 pos=transform.position;
