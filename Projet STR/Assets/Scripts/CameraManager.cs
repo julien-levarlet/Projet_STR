@@ -1,32 +1,34 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
+/// <summary>
+/// Classe chargée de gérer l'affichage à l'écran, en selectionnant les cameras de la scene
+/// </summary>
 public class CameraManager : MonoBehaviour
 {
 
-    [SerializeField] private List<Camera> cameras;
-    private int currentCamIndex;
+    [FormerlySerializedAs("_cameras")] [SerializeField] private Camera[] cameras; 
+    private int _currentCamIndex;
 
-    // Start is called before the first frame update
-    void Start()
+    void Start() // on active seulement la première camera
     {
-        currentCamIndex = 0;
+        _currentCamIndex = 0;
         cameras[0].gameObject.SetActive(true);
-        for (int i=1; i<cameras.Count; i++)
+        for (int i=1; i<cameras.Length; i++)
         {
             cameras[i].gameObject.SetActive(false);
         }
     }
 
-    // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Tab))
+        if (Input.GetKeyDown(KeyCode.Tab)) // en cas d'appuie sur tab on passe à la camera suivante
         {
-            cameras[currentCamIndex].gameObject.SetActive(false);
-            currentCamIndex = (currentCamIndex+1)%cameras.Count;
-            cameras[currentCamIndex].gameObject.SetActive(true);
+            cameras[_currentCamIndex].gameObject.SetActive(false);
+            _currentCamIndex = (_currentCamIndex+1)%cameras.Length;
+            cameras[_currentCamIndex].gameObject.SetActive(true);
         }
     }
 }
