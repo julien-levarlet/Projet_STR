@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 
 /// <summary>
@@ -13,13 +14,18 @@ public abstract class AgentController : MonoBehaviour
 {    
     [SerializeField] private float speed = 500;
     [SerializeField] private float rotSpeed = 300;
-    [SerializeField] protected Transform target;
+    [SerializeField] private const int MaxLife = 3;
+    private int _life;
+    private Vector3 defaultPosition;
+    protected Transform Target;
     private CharacterController _cc;
     private const float Gravity = 9.81f;
-    
+
     protected virtual void Start()
     {
         _cc = GetComponent<CharacterController>(); // on récupère le CharacterController
+        _life = MaxLife;
+        defaultPosition = transform.position;
     }
 
     void Update()
@@ -48,12 +54,30 @@ public abstract class AgentController : MonoBehaviour
     /// <returns>Valeur comprise dans [-1,1]</returns>
     protected abstract float GetInputHorizontal();
 
-    protected void CheckTarget()
+    /// <summary>
+    /// Associe à l'attribut <c>Target</c>, le transforme de l'objet nommé Player dans la scene
+    /// </summary>
+    protected void GetTarget()
     {
-        if (target == null)
-        {
-            gameObject.SetActive(false);
-            throw new Exception("Aucune cible indiquée pour l'ennemi");
-        }
+        Target = GameObject.Find("Player").transform;  // get the player in the scene
+    }
+
+    /// <summary>
+    /// Perte d'un point de vie
+    /// </summary>
+    public void TakeHit()
+    {
+        _life -= 1;
+    }
+
+    /// <summary>
+    /// Quand on sort de zone on perd un point de vie et on retourne à la position de départ
+    /// </summary>
+    /// <param name="hit"></param>
+    private void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        if (hit.gameObject.name != "plane") return;
+        TakeHit();
+        transform.position = defaultPosition;
     }
 }
