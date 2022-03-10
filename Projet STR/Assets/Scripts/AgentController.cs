@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 using UnityEngine.Serialization;
 
 
@@ -9,35 +10,44 @@ using UnityEngine.Serialization;
 /// Classe abtraite représentant un agent (ennemi ou joueur), gérant les déplacement dans la scene.
 /// Les classes héritant de Agent controller doivent surcharger <c>GetInputVertical</c> et <c>GetInputHorizontal</c>.
 /// </summary>
-[RequireComponent(typeof(CharacterController))] // un CharacterController doit être attaché au game-object dans l'éditeur
+[RequireComponent(typeof(Rigidbody))] // un rigidbody doit être attaché au game-object dans l'éditeur
+[RequireComponent(typeof(BoxCollider))]
 public abstract class AgentController : MonoBehaviour
 {    
     [SerializeField] private float speed = 500;
     [SerializeField] private float rotSpeed = 300;
-    [SerializeField] private const int MaxLife = 3;
+    [SerializeField] protected Transform target;
+    private Rigidbody _rb;
+    private Vector3 _defaultPosition;
+    private float _move;
+    private float _rotation;
+    private const int MaxLife = 3;
     private int _life;
-    private Vector3 defaultPosition;
-    protected Transform Target;
-    private CharacterController _cc;
-    private const float Gravity = 9.81f;
 
     protected virtual void Start()
     {
-        _cc = GetComponent<CharacterController>(); // on récupère le CharacterController
+        _rb = GetComponent<Rigidbody>();
         _life = MaxLife;
-        defaultPosition = transform.position;
+        _defaultPosition = transform.position;
     }
 
     void Update()
     {
-        float currentSpeed = GetInputVertical() * speed; // on récupère les valeurs calculées par la classe fille
-        float rotation = GetInputHorizontal() * rotSpeed;
-        transform.Rotate(0, rotation * Time.deltaTime,0); // application de la rotation
-        Vector3 dir = transform.forward * currentSpeed; 
-        dir -= new Vector3(0, Gravity, 0); // prise en compte de la gravité en plus de la translation
-        _cc.SimpleMove(dir  * Time.deltaTime); // application du déplacement
+        _move = GetInputVertical(); // on récupère les valeurs calculées par la classe fille
+        _rotation = GetInputHorizontal();
     }
-    
+
+    private void FixedUpdate()
+    {
+        // on ajuste direction et rotation
+        _rb.MoveRotation(_rb.rotation *
+                         Quaternion.Euler(new Vector3(0, _rotation, 0) * rotSpeed * Time.fixedDeltaTime));
+        Vector3 dir = transform.forward * _move * speed * Time.fixedDeltaTime;
+        dir.y = _rb.velocity.y; // on conserve la gravité
+        _rb.velocity = dir;
+    }
+
+
     /// <summary>
     /// Fonction permettant d'obtenir le mouvement de l'agent sur l'axe vertical, correspondant à la translation de l'agent
     /// Correspond à l'appuie sur les touche haut/bas
@@ -59,7 +69,7 @@ public abstract class AgentController : MonoBehaviour
     /// </summary>
     protected void GetTarget()
     {
-        Target = GameObject.Find("Player").transform;  // get the player in the scene
+        target = GameObject.Find("Player").transform;  // get the player in the scene
     }
 
     /// <summary>
@@ -67,17 +77,22 @@ public abstract class AgentController : MonoBehaviour
     /// </summary>
     public void TakeHit()
     {
+        if (_life <= 0) 
+        {
+            // mort du personnage
+            gameObject.SetActive(false);
+        }
         _life -= 1;
     }
 
     /// <summary>
-    /// Quand on sort de zone on perd un point de vie et on retourne à la position de départ
+    /// Quand on sort de la zone de jeu, on perd un point de vie et on retourne à la position de départ
     /// </summary>
-    /// <param name="hit"></param>
-    private void OnControllerColliderHit(ControllerColliderHit hit)
+    /// <param name="other"></param>
+    private void OnCollisionEnter(Collision other)
     {
-        if (hit.gameObject.name != "plane") return;
+        if (other.gameObject.name != "Plane") return;
         TakeHit();
-        transform.position = defaultPosition;
+        transform.position = _defaultPosition;
     }
 }

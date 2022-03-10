@@ -26,7 +26,7 @@ public class ExempleAI : AgentController
     /// </summary>
     private void Think()
     {
-        Vector3 target_pos = Target.position; // position de notre cible
+        Vector3 target_pos = target.position; // position de notre cible
         _horizontal = Random.value * 2 - 1; //valeur random entre -1 et 1
         _vertical = Random.value * 2 - 1;
     }
