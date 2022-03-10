@@ -12,5 +12,14 @@ using UnityEngine;
 [RequireComponent(typeof(Collider))]
 public class GameManager : MonoBehaviour
 {
-    
+    /// <summary>
+    /// Quand on sort de la zone de jeu, on perd un point de vie et on retourne à la position de départ
+    /// </summary>
+    /// <param name="other"></param>
+    private void OnCollisionEnter(Collision other)
+    {
+        AgentController agent = other.gameObject.GetComponent<AgentController>();
+        agent.TakeHit();
+        agent.ResetPos();
+    }
 }

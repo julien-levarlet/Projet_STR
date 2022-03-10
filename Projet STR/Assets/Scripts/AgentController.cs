@@ -85,14 +85,8 @@ public abstract class AgentController : MonoBehaviour
         _life -= 1;
     }
 
-    /// <summary>
-    /// Quand on sort de la zone de jeu, on perd un point de vie et on retourne à la position de départ
-    /// </summary>
-    /// <param name="other"></param>
-    private void OnCollisionEnter(Collision other)
+    public void ResetPos()
     {
-        if (other.gameObject.name != "Plane") return;
-        TakeHit();
         transform.position = _defaultPosition;
     }
 }
