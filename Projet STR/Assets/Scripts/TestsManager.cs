@@ -16,6 +16,7 @@ public class TestsManager : MonoBehaviour
 
 	void Update()
 	{
+		Application.targetFrameRate = 61;
 		// affichage du taux d'images par seconde
 		temps += Time.deltaTime;
 		nbImages++;
@@ -23,7 +24,7 @@ public class TestsManager : MonoBehaviour
 		if (temps >= pollingTime)
         {
 			int frameRate = Mathf.RoundToInt(nbImages / temps);
-			FpsText.text = frameRate.ToString() + " SPF";
+			FpsText.text = frameRate.ToString() + " FPS";
 			temps -= pollingTime;
 			nbImages = 0;
         }
