@@ -85,8 +85,24 @@ public abstract class AgentController : MonoBehaviour
         _life -= 1;
     }
 
+    public void SetPos(Vector3 pos)
+    {
+        transform.position = pos;
+        _defaultPosition = pos;
+    }
+    
     public void ResetPos()
     {
         transform.position = _defaultPosition;
+    }
+
+    public virtual void Victory()
+    {
+        
+    }
+
+    public virtual void Defeat()
+    {
+        
     }
 }
