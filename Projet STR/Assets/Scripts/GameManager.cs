@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,10 +9,17 @@ using UnityEngine;
 /// - début et fin de partie
 /// - mise en place de différentes règles
 /// </summary>
+[RequireComponent(typeof(Collider))]
 public class GameManager : MonoBehaviour
 {
-    private void OnTriggerEnter(Collider other) // gestion de la sortie de la map
+    /// <summary>
+    /// Quand on sort de la zone de jeu, on perd un point de vie et on retourne à la position de départ
+    /// </summary>
+    /// <param name="other"></param>
+    private void OnCollisionEnter(Collision other)
     {
-        other.gameObject.transform.position = new Vector3(0, 20, 0);
+        AgentController agent = other.gameObject.GetComponent<AgentController>();
+        agent.TakeHit();
+        agent.ResetPos();
     }
 }

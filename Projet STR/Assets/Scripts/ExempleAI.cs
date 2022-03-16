@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,7 +16,7 @@ public class ExempleAI : AgentController
     protected override void Start()
     {
         base.Start(); // ne pas oublier l'appel à base.Start sinon le CharacterController ne sera pas chargé
-        CheckTarget(); // si on doit se baser sur la position du joueur, vérifions qu'il existe
+        GetTarget(); // si on doit se baser sur la position du joueur, il faut d'abord le trouver
         _horizontal = 0f;
         _vertical = 0f;
     }

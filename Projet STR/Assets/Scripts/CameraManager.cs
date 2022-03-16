@@ -9,7 +9,7 @@ using UnityEngine.Serialization;
 public class CameraManager : MonoBehaviour
 {
 
-    [FormerlySerializedAs("_cameras")] [SerializeField] private Camera[] cameras; 
+    [SerializeField] private Camera[] cameras; 
     private int _currentCamIndex;
 
     void Start() // on active seulement la première camera
