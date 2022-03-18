@@ -6,11 +6,14 @@ TagManager:
   tags:
   - Enemy
   - Spawn
+  - Car
+  - Wall
+  - Road
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Car
   - Water
   - UI
   - 
