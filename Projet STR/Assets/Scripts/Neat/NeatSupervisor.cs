@@ -16,12 +16,13 @@ using System.Xml;
 using System.IO;
 using System.Linq;
 using SharpNeat.Core;
+using UnitySharpNEAT;
 
-namespace UnitySharpNEAT
+namespace Neat
 {
     /// <summary>
     /// This class acts as the entry point for the NEAT evolution.
-    /// It manages the UnitController's being evolved and handles the creation of the NeatEvolutionAlgorithm.
+    /// It manages the NeatAgent's being evolved and handles the creation of the NeatEvolutionAlgorithm.
     /// It is also responsible for managing the lifecycle of the evolution, e.g. by starting/stopping it.
     /// </summary>
     public class NeatSupervisor : MonoBehaviour
@@ -53,8 +54,8 @@ namespace UnitySharpNEAT
 
         [Header("Unit Management")]
 
-        [SerializeField, Tooltip("The Unit Prefab, which inherits from UnitController, that should be evaluated and spawned.")]
-        private UnitController _unitControllerPrefab = default;
+        [SerializeField, Tooltip("The Unit Prefab, which inherits from NeatAgent, that should be evaluated and spawned.")]
+        private NeatAgent _unitControllerPrefab = default;
 
         [SerializeField, Tooltip("The parent transform which will hold the instantiated Units.")]
         private Transform _spawnParent = default;
@@ -67,11 +68,11 @@ namespace UnitySharpNEAT
 
 
         // Object pooling and Unit management
-        private Dictionary<IBlackBox, UnitController> _blackBoxMap = new Dictionary<IBlackBox, UnitController>();
+        private Dictionary<IBlackBox, NeatAgent> _blackBoxMap = new Dictionary<IBlackBox, NeatAgent>();
 
-        private HashSet<UnitController> _unusedUnitsPool = new HashSet<UnitController>();
+        private HashSet<NeatAgent> _unusedUnitsPool = new HashSet<NeatAgent>();
 
-        private HashSet<UnitController> _usedUnitsPool = new HashSet<UnitController>();
+        private HashSet<NeatAgent> _usedUnitsPool = new HashSet<NeatAgent>();
 
         private DateTime _startTime;
         #endregion
@@ -182,11 +183,11 @@ namespace UnitySharpNEAT
         }
 
         /// <summary>
-        /// Creates (or re-uses) a UnitController instance and assigns the Neural Net (IBlackBox) to it and activates it, so that it starts executing the Net.
+        /// Creates (or re-uses) a NeatAgent instance and assigns the Neural Net (IBlackBox) to it and activates it, so that it starts executing the Net.
         /// </summary>
         public void ActivateUnit(IBlackBox box)
         {
-            UnitController controller = GetUnusedUnit(box);
+            NeatAgent controller = GetUnusedUnit(box);
             controller.ActivateUnit(box);
         }
 
@@ -198,7 +199,7 @@ namespace UnitySharpNEAT
         {
             if (_blackBoxMap.ContainsKey(box))
             {
-                UnitController controller = _blackBoxMap[box];
+                NeatAgent controller = _blackBoxMap[box];
                 controller.DeactivateUnit();
 
                 _blackBoxMap.Remove(box);
@@ -210,9 +211,9 @@ namespace UnitySharpNEAT
         /// Spawns a Unit. This means either reusing a deactivated unit from the pool or to instantiate a Unit into the pool, in case the pool is empty.
         /// Units don't get Destroyed, instead they are just reset to avoid unneccessary instantiation calls.
         /// </summary>
-        private UnitController GetUnusedUnit(IBlackBox box)
+        private NeatAgent GetUnusedUnit(IBlackBox box)
         {
-            UnitController controller;
+            NeatAgent controller;
 
             if (_unusedUnitsPool.Any())
             {
@@ -231,9 +232,9 @@ namespace UnitySharpNEAT
         /// <summary>
         /// Instantiates a Unit in case no Unit can be drawn from the _unusedUnitPool.
         /// </summary>
-        private UnitController InstantiateUnit(IBlackBox box)
+        private NeatAgent InstantiateUnit(IBlackBox box)
         {
-            UnitController controller = Instantiate(_unitControllerPrefab, _unitControllerPrefab.transform.position, _unitControllerPrefab.transform.rotation);
+            NeatAgent controller = Instantiate(_unitControllerPrefab, _unitControllerPrefab.transform.position, _unitControllerPrefab.transform.rotation);
 
             if (_spawnParent != null)
                 controller.transform.parent = _spawnParent;
@@ -247,7 +248,7 @@ namespace UnitySharpNEAT
         /// <summary>
         /// Puts Units into either the Unused or the Used object pool.
         /// </summary>
-        private void PoolUnit(UnitController controller, bool markUsed)
+        private void PoolUnit(NeatAgent controller, bool markUsed)
         {
             if (markUsed)
             {
@@ -262,13 +263,13 @@ namespace UnitySharpNEAT
         }
 
         /// <summary>
-        /// Destroys all UnitControllers and cleans the Object Pool.
+        /// Destroys all NeatAgents and cleans the Object Pool.
         /// </summary>
         private void DeactivateAllUnits()
         {
-            Dictionary<IBlackBox, UnitController> _blackBoxMapCopy = new Dictionary<IBlackBox, UnitController>(_blackBoxMap);
+            Dictionary<IBlackBox, NeatAgent> _blackBoxMapCopy = new Dictionary<IBlackBox, NeatAgent>(_blackBoxMap);
 
-            foreach (KeyValuePair<IBlackBox, UnitController> boxUnitPair in _blackBoxMapCopy)
+            foreach (KeyValuePair<IBlackBox, NeatAgent> boxUnitPair in _blackBoxMapCopy)
             {
                 DeactivateUnit(boxUnitPair.Key);
             }

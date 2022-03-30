@@ -14,7 +14,7 @@ namespace UnitySharpNEAT
     public class NeatUI : MonoBehaviour
     {
         [SerializeField] 
-        private NeatSupervisor _neatSupervisor;
+        private NeatSupervisorCar neatSupervisorCar;
 
         /// <summary>
         /// Display simple Onscreen buttons for quickly accessing ceratain lifecycle funtions and to display generation info.
@@ -23,22 +23,22 @@ namespace UnitySharpNEAT
         {
             if (GUI.Button(new Rect(10, 10, 110, 40), "Start EA"))
             {
-                _neatSupervisor.StartEvolution();
+                neatSupervisorCar.StartEvolution();
             }
             if (GUI.Button(new Rect(10, 60, 110, 40), "Stop + save EA"))
             {
-                _neatSupervisor.StopEvolution();
+                neatSupervisorCar.StopEvolution();
             }
             if (GUI.Button(new Rect(10, 110, 110, 40), "Run best"))
             {
-                _neatSupervisor.RunBest();
+                neatSupervisorCar.RunBest();
             }
             if (GUI.Button(new Rect(10, 160, 110, 40), "Delete Saves"))
             {
-                ExperimentIO.DeleteAllSaveFiles(_neatSupervisor.Experiment);
+                ExperimentIO.DeleteAllSaveFiles(neatSupervisorCar.ExperimentCar);
             }
 
-            GUI.Button(new Rect(10, Screen.height - 70, 110, 60), string.Format("Generation: {0}\nFitness: {1:0.00}", _neatSupervisor.CurrentGeneration, _neatSupervisor.CurrentBestFitness));
+            GUI.Button(new Rect(10, Screen.height - 70, 110, 60), string.Format("Generation: {0}\nFitness: {1:0.00}", neatSupervisorCar.CurrentGeneration, neatSupervisorCar.CurrentBestFitness));
         }
     }
 }

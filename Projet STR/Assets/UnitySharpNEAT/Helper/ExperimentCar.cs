@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Xml;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 
 namespace UnitySharpNEAT
@@ -28,7 +29,7 @@ namespace UnitySharpNEAT
     /// It is also responsible for loading/saving the current population under the Experiment's 'Name' identifier.
     /// </summary>
     [Serializable]
-    public class Experiment : INeatExperiment
+    public class ExperimentCar : INeatExperiment
     {
         #region MEMBER VARIABLES
         [SerializeField]
@@ -58,8 +59,8 @@ namespace UnitySharpNEAT
         [SerializeField]
         private string _description;
 
-        [SerializeField]
-        private NeatSupervisor _neatSupervisor;
+        [FormerlySerializedAs("_neatSupervisor")] [SerializeField]
+        private NeatSupervisorCar neatSupervisorCar;
 
         [SerializeField]
         private int _inputCount;
@@ -106,7 +107,7 @@ namespace UnitySharpNEAT
         #endregion
 
         #region FUNCTIONS
-        public void Initialize(XmlElement xmlConfig, NeatSupervisor neatSupervisor, int inputCount, int outputCount)
+        public void Initialize(XmlElement xmlConfig, NeatSupervisorCar neatSupervisorCar, int inputCount, int outputCount)
         {
             _name = XmlUtils.TryGetValueAsString(xmlConfig, "ExperimentName");
             _populationSize = XmlUtils.GetValueAsInt(xmlConfig, "PopulationSize");
@@ -121,7 +122,7 @@ namespace UnitySharpNEAT
             _neatGenomeParams = new NeatGenomeParameters();
             _neatGenomeParams.FeedforwardOnly = _activationScheme.AcyclicNetwork;
 
-            _neatSupervisor = neatSupervisor;
+            this.neatSupervisorCar = neatSupervisorCar;
 
             _inputCount = inputCount;
             _outputCount = outputCount;
@@ -168,11 +169,11 @@ namespace UnitySharpNEAT
             NeatEvolutionAlgorithm<NeatGenome> ea = new NeatEvolutionAlgorithm<NeatGenome>(_eaParams, speciationStrategy, complexityRegulationStrategy);
 
             // Create black box evaluator       
-            BlackBoxFitnessEvaluator evaluator = new BlackBoxFitnessEvaluator(_neatSupervisor);
+            BlackBoxFitnessEvaluatorCar evaluatorCar = new BlackBoxFitnessEvaluatorCar(neatSupervisorCar);
 
             IGenomeDecoder<NeatGenome, IBlackBox> genomeDecoder = CreateGenomeDecoder();
 
-            IGenomeListEvaluator<NeatGenome> innerEvaluator = new CoroutinedListEvaluator<NeatGenome, IBlackBox>(genomeDecoder, evaluator, _neatSupervisor);
+            IGenomeListEvaluator<NeatGenome> innerEvaluator = new CoroutinedListEvaluatorCar<NeatGenome, IBlackBox>(genomeDecoder, evaluatorCar, neatSupervisorCar);
 
             IGenomeListEvaluator<NeatGenome> selectiveEvaluator = new SelectiveGenomeListEvaluator<NeatGenome>(innerEvaluator,
                 SelectiveGenomeListEvaluator<NeatGenome>.CreatePredicate_OnceOnly());

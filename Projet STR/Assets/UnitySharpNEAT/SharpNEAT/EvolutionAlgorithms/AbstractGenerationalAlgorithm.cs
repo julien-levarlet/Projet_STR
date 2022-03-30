@@ -24,6 +24,7 @@ using SharpNeat.Core;
 using UnityEngine;
 using System.Collections;
 using UnitySharpNEAT;
+using Neat;
 
 namespace SharpNeat.EvolutionAlgorithms
 {

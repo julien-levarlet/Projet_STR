@@ -11,6 +11,7 @@ using SharpNeat.Core;
 using SharpNeat.Phenomes;
 using System.Collections.Generic;
 using System;
+using UnityEngine.Serialization;
 
 namespace UnitySharpNEAT
 {
@@ -19,7 +20,7 @@ namespace UnitySharpNEAT
     /// which evaluates the performance (fitness) of the IBlackBox's (Neural Nets) of our instantiated Units.
     /// </summary>
     [Serializable]
-    public class BlackBoxFitnessEvaluator : IPhenomeEvaluator<IBlackBox>
+    public class BlackBoxFitnessEvaluatorCar : IPhenomeEvaluator<IBlackBox>
     {
         [SerializeField]
         private ulong _evalCount;
@@ -27,8 +28,8 @@ namespace UnitySharpNEAT
         [SerializeField]
         private bool _stopConditionSatisfied;
 
-        [SerializeField]
-        private NeatSupervisor _neatSupervisor;
+        [FormerlySerializedAs("_neatSupervisor")] [SerializeField]
+        private NeatSupervisorCar neatSupervisorCar;
 
         private Dictionary<IBlackBox, FitnessInfo> _fitnessByBox = new Dictionary<IBlackBox, FitnessInfo>();
 
@@ -42,16 +43,16 @@ namespace UnitySharpNEAT
             get { return _stopConditionSatisfied; }
         }
 
-        public BlackBoxFitnessEvaluator(NeatSupervisor neatSupervisor)
+        public BlackBoxFitnessEvaluatorCar(NeatSupervisorCar neatSupervisorCar)
         {
-            this._neatSupervisor = neatSupervisor;
+            this.neatSupervisorCar = neatSupervisorCar;
         }
 
         public void Evaluate(IBlackBox box)
         {
-            if (_neatSupervisor != null)
+            if (neatSupervisorCar != null)
             {
-                float fit = _neatSupervisor.GetFitness(box);
+                float fit = neatSupervisorCar.GetFitness(box);
 
                 FitnessInfo fitness = new FitnessInfo(fit, fit);
                 _fitnessByBox.Add(box, fitness);

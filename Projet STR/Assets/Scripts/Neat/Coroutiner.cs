@@ -7,8 +7,9 @@
 */
 using UnityEngine;
 using System.Collections;
+using UnitySharpNEAT;
 
-namespace UnitySharpNEAT
+namespace Neat
 {
     /// <summary>
     /// Classes that do not inherit from MonoBehaviour, or static 

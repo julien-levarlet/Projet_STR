@@ -13,8 +13,10 @@ using SharpNeat.Core;
 using System.Collections;
 using UnityEngine;
 using SharpNeat.Phenomes;
+using UnityEngine.Serialization;
+using UnitySharpNEAT;
 
-namespace UnitySharpNEAT
+namespace Neat
 {
     /// <summary>
     /// Evaluates the fitness of a List of genomes through the use of Coroutines. 
@@ -34,8 +36,8 @@ namespace UnitySharpNEAT
         [SerializeField] 
         private IPhenomeEvaluator<TPhenome> _phenomeEvaluator;
 
-        [SerializeField] 
-        private NeatSupervisor _neatSupervisor;
+        [FormerlySerializedAs("_neatSupervisor")] [SerializeField] 
+        private NeatSupervisor neatSupervisor;
 
         #region Constructor
         /// <summary>
@@ -47,7 +49,7 @@ namespace UnitySharpNEAT
         {
             _genomeDecoder = genomeDecoder;
             _phenomeEvaluator = phenomeEvaluator;
-            _neatSupervisor = neatSupervisor;
+            this.neatSupervisor = neatSupervisor;
         }
 
         #endregion
@@ -74,7 +76,7 @@ namespace UnitySharpNEAT
 
             Dictionary<TGenome, TPhenome> dict = new Dictionary<TGenome, TPhenome>();
             Dictionary<TGenome, FitnessInfo[]> fitnessDict = new Dictionary<TGenome, FitnessInfo[]>();
-            for (int i = 0; i < _neatSupervisor.Trials; i++)
+            for (int i = 0; i < neatSupervisor.Trials; i++)
             {
                 Utility.Log("UnityParallelListEvaluator.EvaluateList -- Begin Trial " + (i + 1));
                 //_phenomeEvaluator.Reset();  // _phenomeEvaluator = SimpleEvalutator instance, created in Experiment.cs
@@ -94,16 +96,16 @@ namespace UnitySharpNEAT
                         else
                         {
                             // Assign the IBlackBox to a unit and let the Unit perform
-                            _neatSupervisor.ActivateUnit((IBlackBox)phenome);
+                            neatSupervisor.ActivateUnit((IBlackBox)phenome);
 
-                            fitnessDict.Add(genome, new FitnessInfo[_neatSupervisor.Trials]);
+                            fitnessDict.Add(genome, new FitnessInfo[neatSupervisor.Trials]);
                             dict.Add(genome, phenome);
                         }
                     }
                 } 
            
                 // wait until the next trail, i.e. when the next evaluation should happen
-                yield return new WaitForSeconds(_neatSupervisor.TrialDuration);
+                yield return new WaitForSeconds(neatSupervisor.TrialDuration);
 
                 // evaluate the fitness of all phenomes (IBlackBox) during this trial duration.
                 foreach (TGenome genome in dict.Keys)
@@ -129,23 +131,23 @@ namespace UnitySharpNEAT
                 {
                     double fitness = 0;
 
-                    for (int i = 0; i < _neatSupervisor.Trials; i++)
+                    for (int i = 0; i < neatSupervisor.Trials; i++)
                     {
                         fitness += fitnessDict[genome][i]._fitness;
                     }
                     var fit = fitness;
-                    fitness /= _neatSupervisor.Trials; // Averaged fitness
+                    fitness /= neatSupervisor.Trials; // Averaged fitness
                     
-                    if (fitness > _neatSupervisor.StoppingFitness)
+                    if (fitness > neatSupervisor.StoppingFitness)
                     {
-                      Utility.Log("Fitness is " + fit + ", stopping now because stopping fitness is " + _neatSupervisor.StoppingFitness);
+                      Utility.Log("Fitness is " + fit + ", stopping now because stopping fitness is " + neatSupervisor.StoppingFitness);
                       //  _phenomeEvaluator.StopConditionSatisfied = true;
                     }
                     genome.EvaluationInfo.SetFitness(fitness);
                     genome.EvaluationInfo.AuxFitnessArr = fitnessDict[genome][0]._auxFitnessArr;
 
                     // The phenome has performed, deactivate the Unit the phenome was assigned to.
-                    _neatSupervisor.DeactivateUnit((IBlackBox)phenome);
+                    neatSupervisor.DeactivateUnit((IBlackBox)phenome);
                 }
             }
             yield return 0;
