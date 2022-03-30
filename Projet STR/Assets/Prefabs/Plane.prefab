@@ -328,6 +328,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0007ab050cce420eb1f0fcacb6ebf750, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  PrefabVictory: {fileID: 4297920608735103153, guid: 3a3809204e82edd419681ddd890ec67c, type: 3}
 --- !u!114 &1182677312629900575
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -340,4 +341,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c818389f435394b4bb02600b4628cbad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cameras: []
+  cameras:
+  - {fileID: 5609579402487213685}
+  - {fileID: 1108778286703878321}
+  - {fileID: 1108778286703878321}
+  - {fileID: 1108778286703878321}
+  - {fileID: 1108778286703878321}
