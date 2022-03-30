@@ -23,18 +23,30 @@ public abstract class AgentController : MonoBehaviour
     private float _rotation;
     private const int MaxLife = 3;
     private int _life;
+    private Animator _animator;
 
     protected virtual void Start()
     {
         _rb = GetComponent<Rigidbody>();
         _life = MaxLife;
         _defaultPosition = transform.position;
+        _animator = GetComponentInChildren<Animator>();
     }
 
     void Update()
     {
         _move = GetInputVertical(); // on récupère les valeurs calculées par la classe fille
         _rotation = GetInputHorizontal();
+        
+        // Gestion de l'attaque
+        if (AttackCondition())
+        {
+            _animator.SetTrigger("Attack");
+        }
+        else
+        {
+            _animator.ResetTrigger("Attack");
+        }
     }
 
     private void FixedUpdate()
@@ -105,4 +117,10 @@ public abstract class AgentController : MonoBehaviour
     {
         
     }
+    
+    /// <summary>
+    /// Définit si un coup doit être donné ou nom
+    /// </summary>
+    /// <returns> vrai si une attaque doit être faite faux sinon </returns>
+    public abstract bool AttackCondition();
 }
