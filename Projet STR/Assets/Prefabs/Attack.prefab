@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 9172467986476886651}
   - component: {fileID: 4618686540412427041}
-  - component: {fileID: 7965512978600369727}
   m_Layer: 0
   m_Name: Attack
   m_TagString: Untagged
@@ -52,18 +51,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &7965512978600369727
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 336369706341476108}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cf5f461f71ccf0844be0ae7352fdb324, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &6203052931331002695
 PrefabInstance:
   m_ObjectHideFlags: 0

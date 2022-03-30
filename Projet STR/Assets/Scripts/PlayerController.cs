@@ -27,4 +27,9 @@ public class PlayerController : AgentController
             return 1;
         return Input.GetKey(KeyCode.LeftArrow) ? -1 : 0;
     }
+
+    public override bool AttackCondition()
+    {
+        return Input.GetKey(KeyCode.Mouse0);
+    }
 }

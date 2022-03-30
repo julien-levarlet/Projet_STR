@@ -16,4 +16,9 @@ public class BasicIA : AgentController
     {
         throw new System.NotImplementedException();
     }
+
+    public override bool AttackCondition()
+    {
+        throw new System.NotImplementedException();
+    }
 }

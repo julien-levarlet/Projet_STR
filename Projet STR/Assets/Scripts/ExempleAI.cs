@@ -41,4 +41,9 @@ public class ExempleAI : AgentController
     {
         return _horizontal;
     }
+
+    public override bool AttackCondition()
+    {
+        return (target.position - transform.position).magnitude < 3;
+    }
 }
