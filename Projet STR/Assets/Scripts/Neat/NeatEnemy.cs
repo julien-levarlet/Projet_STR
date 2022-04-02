@@ -19,6 +19,11 @@ namespace Neat
             throw new System.NotImplementedException();
         }
 
+        public override bool AttackCondition()
+        {
+            throw new System.NotImplementedException();
+        }
+
         public override void ActivateUnit(IBlackBox blackBox)
         {
             throw new System.NotImplementedException();

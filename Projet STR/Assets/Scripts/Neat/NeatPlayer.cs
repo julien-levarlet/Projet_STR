@@ -20,6 +20,11 @@ namespace Neat
             throw new System.NotImplementedException();
         }
 
+        public override bool AttackCondition()
+        {
+            throw new System.NotImplementedException();
+        }
+
         protected override void UpdateBlackBoxInputs(ISignalArray inputSignalArray)
         {
             throw new System.NotImplementedException();
