@@ -1,7 +1,6 @@
-using SharpNeat.Phenomes;
-using UnityEngine;
 
-namespace Neat
+
+namespace NEAT
 {
     public class NeatPlayer : NeatAgent
     {
@@ -21,26 +20,6 @@ namespace Neat
         }
 
         public override bool AttackCondition()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        protected override void UpdateBlackBoxInputs(ISignalArray inputSignalArray)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        protected override void UseBlackBoxOutpts(ISignalArray outputSignalArray)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public override float GetFitness()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        protected override void HandleIsActiveChanged(bool newIsActive)
         {
             throw new System.NotImplementedException();
         }
