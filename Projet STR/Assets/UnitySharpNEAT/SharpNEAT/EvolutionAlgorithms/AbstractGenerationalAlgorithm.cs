@@ -24,7 +24,6 @@ using SharpNeat.Core;
 using UnityEngine;
 using System.Collections;
 using UnitySharpNEAT;
-using Neat;
 
 namespace SharpNeat.EvolutionAlgorithms
 {
@@ -171,7 +170,6 @@ namespace SharpNeat.EvolutionAlgorithms
             {   
                 // Create a new Coroutine and start it running.
                 _runState = RunState.Running;
-                Coroutiner.StartCoroutine( AlgorithmThreadMethod() );
                 OnUpdateEvent();
             }
             else if(RunState.Paused == _runState)

@@ -3,7 +3,15 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Random = System.Random;
+
+public enum GameState
+{
+    StageCleared,
+    Victory,
+    Lose
+}
 
 /// <summary>
 /// Classe se chargeant de vérifier le bon déroulement du jeu :
@@ -16,11 +24,14 @@ using Random = System.Random;
 public class GameManager : MonoBehaviour
 {
     private static GameManager _instance; // instance du singleton
+    private GameState _state;
     private GameObject _player;
     private GameObject[] _enemies;
     private GameObject _victory;
     public GameObject PrefabVictory;
     private Vector3[] _validPositions;
+
+    public static event Action<GameState> OnGameStateChanged;
 
     void Awake()  // à l'instanciation
     {
@@ -77,6 +88,11 @@ public class GameManager : MonoBehaviour
         SetPositions();
     }
 
+    private void Restart()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
     private void SetPositions()
     {
         // On mélange la liste des position pour en affecter une alétoire pour chaque agent
@@ -103,13 +119,52 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKey(KeyCode.A))
+        // redemarrage de la position des agents
+        if (Input.GetKey(KeyCode.P))
             SetPositions();
+        // redemarrage de la partie
+        if (Input.GetKey(KeyCode.R))
+            Restart();
+        
+        if (!_player.activeSelf)
+        {
+            UpdateGameState(GameState.Lose);
+        }
+    }
+
+    public void UpdateGameState(GameState state)
+    {
+        _state = state;
+
+        switch(state)
+        {
+            case GameState.StageCleared:
+                break;
+            case GameState.Victory:
+                PlayerWon();
+                break;
+            case GameState.Lose:
+                PlayerLost();
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(state), state, null);
+        }
+
+        OnGameStateChanged?.Invoke(state);
     }
 
     public void PlayerWon()
     {
-        Debug.Log("Le joueur à gagné");
+        Debug.Log("Le joueur a gagné");
+        //yield return new WaitForSeconds(5);
+        Restart();
+    }
+
+    public void PlayerLost()
+    {
+        Debug.Log("Le joueur a perdu");
+        //yield return new WaitForSeconds (5);
+        Restart();
     }
 
 
