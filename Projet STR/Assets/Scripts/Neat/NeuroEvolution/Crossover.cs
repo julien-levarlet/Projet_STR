@@ -134,8 +134,6 @@ namespace NEAT
 
             List<int> ends = new List<int>();
 
-            int vertexCount = first.vertices.Count;
-
             for (int i = 0; i < first.vertices.Count; i++)
             {
                 VertexInfo vertex = first.vertices[i];
