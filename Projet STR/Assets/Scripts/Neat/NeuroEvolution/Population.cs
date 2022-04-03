@@ -42,8 +42,6 @@ namespace NEAT
                 Genotype child = Crossover.instance.ProduceOffspring(members[s1], members[s2]);
                 Mutation.instance.MutateAll(child);
 
-                int selection = UnityEngine.Random.Range(0, members.Count);
-
                 return child;
             }
             else
@@ -113,8 +111,6 @@ namespace NEAT
 
     public class Population
     {
-        public static Population instance = null;
-
         public int GENERATION = 0;
 
         public int POPULATION_SIZE = 256;
@@ -127,14 +123,7 @@ namespace NEAT
         public List<Species> species;
         public List<Genotype> genetics;
         public List<Phenotype> population;
-
-        public static void Initialise()
-        {
-            if (instance == null)
-            {
-                instance = new Population();
-            }
-        }
+        
 
         public Population()
         {
