@@ -8,21 +8,29 @@ namespace NEAT
     public abstract class NeatAgent : AgentController
     {
         [SerializeField] protected string saveFile;
-        protected Phenotype neat;
-        
+        protected Phenotype neatPhenotype;
+        protected Genotype neatGenotype;
+
         /// <summary>
         /// Associe le joueur à son réseau 
         /// </summary>
         /// <param name="ph"></param>
-        public void SetNeat(Phenotype ph)
+        /// <param name="gen"></param>
+        public void SetNeat(Phenotype ph, Genotype gen)
         {
-            neat = ph;
+            neatPhenotype = ph;
+            neatGenotype = gen;
+        }
+
+        public override bool AttackCondition()
+        {
+            throw new System.NotImplementedException();
         }
 
         /// <summary>
         /// Ajout de la valeur en paramètre à la fitnesse du modele
         /// </summary>
-        public void Reward()
+        public override void Reward(int reward)
         {
             
         }
