@@ -5,7 +5,7 @@ namespace NEAT
 {
     public class LearningManager: MonoBehaviour
     {
-        private const int Inputs = 6;
+        private const int Inputs = 6; // notre position, position du joueur et position de l'objectif
         private const int Outputs = 3;
         private const int PopulationSize = 50;
 
@@ -33,6 +33,11 @@ namespace NEAT
             _enemyPopulation.GenerateBasePopulation(PopulationSize, Inputs, Outputs);
             
             InstantiatePlatforms();
+            
+            // Association de Neat aux object dans la scene
+            for (int i = 0; i < PopulationSize; ++i)
+            {
+            }
         }
 
         /// <summary>

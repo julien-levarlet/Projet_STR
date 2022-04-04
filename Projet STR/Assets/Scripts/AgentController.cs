@@ -117,6 +117,11 @@ public abstract class AgentController : MonoBehaviour
     {
         
     }
+
+    public virtual void Reward(int reward)
+    {
+        
+    }
     
     /// <summary>
     /// Définit si un coup doit être donné ou nom
