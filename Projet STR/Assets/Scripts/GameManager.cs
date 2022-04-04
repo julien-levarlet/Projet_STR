@@ -8,6 +8,8 @@ using Random = System.Random;
 
 public enum GameState
 {
+    GameStart,
+    InProgress,
     StageCleared,
     Victory,
     Lose
@@ -138,6 +140,10 @@ public class GameManager : MonoBehaviour
 
         switch(state)
         {
+            case GameState.GameStart:
+                break;
+            case GameState.InProgress:
+                break;
             case GameState.StageCleared:
                 break;
             case GameState.Victory:
@@ -156,14 +162,12 @@ public class GameManager : MonoBehaviour
     public void PlayerWon()
     {
         Debug.Log("Le joueur a gagné");
-        //yield return new WaitForSeconds(5);
         Restart();
     }
 
     public void PlayerLost()
     {
         Debug.Log("Le joueur a perdu");
-        //yield return new WaitForSeconds (5);
         Restart();
     }
 
