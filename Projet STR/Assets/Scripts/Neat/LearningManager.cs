@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace NEAT
@@ -10,16 +11,13 @@ namespace NEAT
         private const int PopulationSize = 50;
 
         [SerializeField] private GameObject platformPrefab;
-        private NeatPlayer[] _players;
-        private NeatEnemy[] _enemies;
+        private NeatAgent[] _players;
+        private NeatAgent[] _enemies;
         private Population _playerPopulation;
         private Population _enemyPopulation;
         
         private void Start()
         {
-            _players = new NeatPlayer[PopulationSize];
-            _enemies = new NeatEnemy[PopulationSize];
-            
             // Création des singletons
             Crossover.Initialise();
             Mutation.Initialise();
@@ -27,16 +25,26 @@ namespace NEAT
 
             _playerPopulation = new Population();
             _enemyPopulation = new Population();
+
+            _players = new NeatAgent[PopulationSize];
+            _enemies = new NeatAgent[PopulationSize];
             
             // mise en place de la population
             _playerPopulation.GenerateBasePopulation(PopulationSize, Inputs, Outputs);
             _enemyPopulation.GenerateBasePopulation(PopulationSize, Inputs, Outputs);
             
             InstantiatePlatforms();
-            
+
+            List<Genotype> genPlayers = _playerPopulation.genetics;
+            List<Phenotype> phPlayers = _playerPopulation.population;
+            List<Genotype> genEnemies = _playerPopulation.genetics;
+            List<Phenotype> phsEnemies = _playerPopulation.population;
+
             // Association de Neat aux object dans la scene
             for (int i = 0; i < PopulationSize; ++i)
             {
+                _players[i].SetNeat(phPlayers[i], genPlayers[i]);
+                _enemies[i].SetNeat(phsEnemies[i], genEnemies[i]);
             }
         }
 
@@ -65,8 +73,8 @@ namespace NEAT
             }
             for (int i = 0; i < objP.Length; ++i)
             {
-                _players[i] = objP[i].GetComponent<NeatPlayer>();
-                _enemies[i] = objE[i].GetComponent<NeatEnemy>();
+                _players[i] = objP[i].gameObject.GetComponent<NeatAgent>();
+                _enemies[i] = objE[i].gameObject.GetComponent<NeatAgent>();
             }
         }
     }
