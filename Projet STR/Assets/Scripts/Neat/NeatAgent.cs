@@ -52,16 +52,6 @@ namespace NEAT
             return actions[1];
         }
 
-        protected override float GetInputVertical()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        protected override float GetInputHorizontal()
-        {
-            throw new System.NotImplementedException();
-        }
-
         /// <summary>
         /// Ajout de la valeur en paramètre à la fitnesse du modele
         /// </summary>

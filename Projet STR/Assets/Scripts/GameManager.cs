@@ -31,6 +31,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject[] enemies;
     [SerializeField] private GameObject victory;
     private Vector3[] _validPositions;
+    private float distProche;
 
     public static event Action<GameState> OnGameStateChanged;
 
@@ -40,7 +41,8 @@ public class GameManager : MonoBehaviour
         //player = GameObject.Find("Player");
         //enemies = GameObject.FindGameObjectsWithTag("Enemy");
         //var positions = GameObject.FindGameObjectsWithTag("Spawn");
-        
+        distProche = Vector3.Distance(player.GetComponent<AgentController>().target.position,victory.gameObject.transform.position);
+
         _validPositions = new Vector3[spawns.Length];
         
         for (int i=0; i<spawns.Length; ++i)
@@ -99,15 +101,14 @@ public class GameManager : MonoBehaviour
         victory.transform.position = _validPositions[++index];
     }
     
-    private float distProche = Vector3.Distance(_player.GetComponent<AgentController>().target.position,_victory.gameObject.transform.position);
     private void Update()
     {
-        float dist = Vector3.Distance(_player.GetComponent<AgentController>().target.position,
-            _victory.gameObject.transform.position);
+        float dist = Vector3.Distance(player.GetComponent<AgentController>().target.position,
+            victory.gameObject.transform.position);
         if (distProche > dist)
         {
             float ecart = distProche - dist;
-            _player.GetComponent<NeatAgent>().Reward(ecart);
+            player.GetComponent<NeatAgent>().Reward(ecart);
             distProche = dist;
         }
         
@@ -128,13 +129,13 @@ public class GameManager : MonoBehaviour
             UpdateGameState(GameState.Lose);
         }
         //donne des points à l'ennemi en fonctin du temps et plus le joueur est blessé
-        _enemies[0].GetComponent<AgentController>().Reward(2);
-        _enemies[0].GetComponent<NeatAgent>().Reward(3*(AgentController.MaxLife-_enemies[0].GetComponent<AgentController>()._life));
+        enemies[0].GetComponent<AgentController>().Reward(2);
+        enemies[0].GetComponent<NeatAgent>().Reward(3*(AgentController.MaxLife-enemies[0].GetComponent<AgentController>()._life));
         
         //donne des points au joueur tant qu'il n'est pas blessé
-        if (_player.GetComponent<AgentController>()._life==AgentController.MaxLife)
+        if (player.GetComponent<AgentController>()._life==AgentController.MaxLife)
         {
-            _player.GetComponent<NeatAgent>().Reward(3);
+            player.GetComponent<NeatAgent>().Reward(3);
         }
         
     }
@@ -168,15 +169,15 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("Le joueur a gagné");
         //update fitness
-        _player.GetComponent<AgentController>().Reward(10000);
+        player.GetComponent<AgentController>().Reward(10000);
         
         //reward joueur avec le temps
-       // _playerr.Reward(1000/Temps passé);
-       for (int i = 0; i < _enemies.Length; i++)
+       // playerr.Reward(1000/Temps passé);
+       for (int i = 0; i < enemies.Length; i++)
        {
-           if (_enemies[i].GetComponent<AgentController>()._life == 0)
+           if (enemies[i].GetComponent<AgentController>()._life == 0)
            {
-               _player.GetComponent<AgentController>().Reward(50);
+               player.GetComponent<AgentController>().Reward(50);
            }
        }
         //renvoi fitness au RDN
@@ -187,13 +188,13 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("Le joueur a perdu");
         //update fitness
-        _enemies[0].GetComponent<AgentController>().Reward(10000);
+        enemies[0].GetComponent<AgentController>().Reward(10000);
         
-        for (int i = 0; i < _enemies.Length; i++)
+        for (int i = 0; i < enemies.Length; i++)
         {
-            if (_enemies[i].GetComponent<AgentController>()._life == 0)
+            if (enemies[i].GetComponent<AgentController>()._life == 0)
             {
-                _player.GetComponent<AgentController>().Reward(50);
+                player.GetComponent<AgentController>().Reward(50);
             }
         }
         //renvoi fitness au RDN
