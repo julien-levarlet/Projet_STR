@@ -16,13 +16,13 @@ public abstract class AgentController : MonoBehaviour
 {    
     [SerializeField] private float speed = 500;
     [SerializeField] private float rotSpeed = 300;
-    [SerializeField] protected Transform target;
+    [SerializeField] public Transform target;
     private Rigidbody _rb;
     private Vector3 _defaultPosition;
     private float _move;
     private float _rotation;
-    private const int MaxLife = 3;
-    private int _life;
+    public const int MaxLife = 3;
+    public int _life;
     private Animator _animator;
 
     protected virtual void Start()
@@ -118,7 +118,7 @@ public abstract class AgentController : MonoBehaviour
         
     }
 
-    public virtual void Reward(int reward)
+    public virtual void Reward(float reward)
     {
         
     }

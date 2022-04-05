@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using NEAT;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Random = System.Random;
@@ -27,11 +28,12 @@ public class GameManager : MonoBehaviour
 {
     private static GameManager _instance; // instance du singleton
     private GameState _state;
-    private GameObject _player;
     private GameObject[] _enemies;
-    private GameObject _victory;
+    public static GameObject _victory;
+    public static GameObject _player;
     public GameObject PrefabVictory;
     private Vector3[] _validPositions;
+
 
     public static event Action<GameState> OnGameStateChanged;
 
@@ -118,9 +120,24 @@ public class GameManager : MonoBehaviour
         else
             _victory.gameObject.transform.position = _validPositions[++index];
     }
-
+    
+    private float distProche = Vector3.Distance(_player.GetComponent<AgentController>().target.position,_victory.gameObject.transform.position);
     private void Update()
     {
+        float dist = Vector3.Distance(_player.GetComponent<AgentController>().target.position,
+            _victory.gameObject.transform.position);
+        if (distProche > dist)
+        {
+            float ecart = distProche - dist;
+            _player.GetComponent<NeatAgent>().Reward(ecart);
+            distProche = dist;
+        }
+        
+        //Mise a jour alive
+        //Si ennemi meurt passe à false
+        //Mise a jour distProche
+        //Si jamais distance joueur objectif a diminué donne point au joueur de la distance diminuée * 10 
+
         // redemarrage de la position des agents
         if (Input.GetKey(KeyCode.P))
             SetPositions();
@@ -132,6 +149,16 @@ public class GameManager : MonoBehaviour
         {
             UpdateGameState(GameState.Lose);
         }
+        //donne des points à l'ennemi en fonctin du temps et plus le joueur est blessé
+        _enemies[0].GetComponent<AgentController>().Reward(2);
+        _enemies[0].GetComponent<NeatAgent>().Reward(3*(AgentController.MaxLife-_enemies[0].GetComponent<AgentController>()._life));
+        
+        //donne des points au joueur tant qu'il n'est pas blessé
+        if (_player.GetComponent<AgentController>()._life==AgentController.MaxLife)
+        {
+            _player.GetComponent<NeatAgent>().Reward(3);
+        }
+        
     }
 
     public void UpdateGameState(GameState state)
@@ -159,15 +186,40 @@ public class GameManager : MonoBehaviour
         OnGameStateChanged?.Invoke(state);
     }
 
+    
     public void PlayerWon()
     {
         Debug.Log("Le joueur a gagné");
+        //update fitness
+        _player.GetComponent<AgentController>().Reward(10000);
+        
+        //reward joueur avec le temps
+       // _playerr.Reward(1000/Temps passé);
+       for (int i = 0; i < _enemies.Length; i++)
+       {
+           if (_enemies[i].GetComponent<AgentController>()._life == 0)
+           {
+               _player.GetComponent<AgentController>().Reward(50);
+           }
+       }
+        //renvoi fitness au RDN
         Restart();
     }
 
     public void PlayerLost()
     {
         Debug.Log("Le joueur a perdu");
+        //update fitness
+        _enemies[0].GetComponent<AgentController>().Reward(10000);
+        
+        for (int i = 0; i < _enemies.Length; i++)
+        {
+            if (_enemies[i].GetComponent<AgentController>()._life == 0)
+            {
+                _player.GetComponent<AgentController>().Reward(50);
+            }
+        }
+        //renvoi fitness au RDN
         Restart();
     }
 
