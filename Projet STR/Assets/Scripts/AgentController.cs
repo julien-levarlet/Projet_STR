@@ -28,7 +28,7 @@ public abstract class AgentController : MonoBehaviour
     protected virtual void Start()
     {
         _rb = GetComponent<Rigidbody>();
-        life = MaxLife;
+        //life = MaxLife;
         _defaultPosition = transform.position;
         _animator = GetComponentInChildren<Animator>();
     }
@@ -89,12 +89,12 @@ public abstract class AgentController : MonoBehaviour
     /// </summary>
     public void TakeHit()
     {
+        life -= 1;
         if (life <= 0) 
         {
             // mort du personnage
             gameObject.SetActive(false);
         }
-        life -= 1;
     }
 
     public void SetPos(Vector3 pos)

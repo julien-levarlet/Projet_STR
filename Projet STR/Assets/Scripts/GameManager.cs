@@ -32,7 +32,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject[] enemies;
     [SerializeField] private GameObject victory;
     private Vector3[] _validPositions;
-    private float distProche;
+    private float initDistPlayer; // distance initiale entre le joueur et l'objectif
+    private float initDistEnemy; // distance 
     [SerializeField] private bool isTraining;
 
     public static event Action<GameState> OnGameStateChanged;
@@ -43,7 +44,7 @@ public class GameManager : MonoBehaviour
         //player = GameObject.Find("Player");
         //enemies = GameObject.FindGameObjectsWithTag("Enemy");
         //var positions = GameObject.FindGameObjectsWithTag("Spawn");
-        distProche = Vector3.Distance(player.transform.position,victory.gameObject.transform.position);
+        initDistPlayer = Vector3.Distance(player.transform.position,victory.gameObject.transform.position);
 
         _validPositions = new Vector3[spawns.Length];
         
@@ -89,19 +90,14 @@ public class GameManager : MonoBehaviour
     {
         // On mélange la liste des position pour en affecter une alétoire pour chaque agent
         // https://stackoverflow.com/questions/14473321/generating-random-unique-values-c-sharp
-        if (!player.activeSelf)
-        {
-            player.SetActive(true);
-            player.GetComponent<AgentController>().life = AgentController.MaxLife;
-        }
+        
+        player.SetActive(true);
+        player.GetComponent<AgentController>().life = AgentController.MaxLife;
 
         foreach (var en in enemies)
         {
-            if (!en.activeSelf)
-            {
-                en.SetActive(true);
-                en.GetComponent<AgentController>().life = AgentController.MaxLife;
-            }
+            en.SetActive(true);
+            en.GetComponent<AgentController>().life = 1;
         }
         
         var rnd = new Random();
@@ -115,11 +111,9 @@ public class GameManager : MonoBehaviour
         for (; index < enemies.Length; ++index)
         {
             enemies[index].GetComponent<AgentController>().SetPos(_validPositions[index]);
-            enemies[index].GetComponent<AgentController>().life = AgentController.MaxLife;
         }
 
         player.GetComponent<AgentController>().SetPos(_validPositions[index]);
-        player.GetComponent<AgentController>().life = AgentController.MaxLife;
         
         // placement du point de victoire
         victory.transform.position = _validPositions[++index];
@@ -131,10 +125,17 @@ public class GameManager : MonoBehaviour
         {
             float dist = Vector3.Distance(player.transform.position,
                 victory.gameObject.transform.position);
-            if (distProche > dist)
+            if (initDistPlayer > dist)
             {
-                player.GetComponent<NeatAgent>().Reward(distProche - dist);
-                distProche = dist;
+                player.GetComponent<NeatAgent>().Reward((initDistPlayer - dist)*10);
+                //initDistPlayer = dist;
+            }
+
+            dist = Vector3.Distance(enemies[0].transform.position, player.transform.position);
+            if (initDistEnemy > dist)
+            {
+                enemies[0].GetComponent<NeatAgent>().Reward((initDistEnemy - dist)*10);
+                //initDistPlayer = dist;
             }
             
             //donne des points à l'ennemi en fonction du temps et plus le joueur est blessé

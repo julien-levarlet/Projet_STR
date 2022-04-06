@@ -31,8 +31,8 @@ namespace NEAT
             
             float[] input =
             {
-                transform.position.x, transform.position.z, target.position.x, target.position.z,
-                victoryTarget.position.x, victoryTarget.position.z
+                transform.localPosition.x, transform.localPosition.z, target.localPosition.x, target.localPosition.z,
+                victoryTarget.localPosition.x, victoryTarget.localPosition.z
             };
             actions = neatPhenotype.Propagate(input);
         }
