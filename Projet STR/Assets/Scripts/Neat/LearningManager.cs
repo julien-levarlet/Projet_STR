@@ -37,8 +37,8 @@ namespace NEAT
 
             List<Genotype> genPlayers = _playerPopulation.genetics;
             List<Phenotype> phPlayers = _playerPopulation.population;
-            List<Genotype> genEnemies = _playerPopulation.genetics;
-            List<Phenotype> phsEnemies = _playerPopulation.population;
+            List<Genotype> genEnemies = _enemyPopulation.genetics;
+            List<Phenotype> phsEnemies = _enemyPopulation.population;
 
             // Association de Neat aux object dans la scene
             for (int i = 0; i < PopulationSize; ++i)
@@ -51,6 +51,22 @@ namespace NEAT
         /// <summary>
         /// Ajout à la scene des platformes d'entrainement sous forme de grille
         /// </summary>
+
+        private void NewGeneration()
+        {
+            _playerPopulation.NewGeneration();
+            _enemyPopulation.NewGeneration();
+            List<Genotype> genPlayers = _playerPopulation.genetics;
+            List<Phenotype> phPlayers = _playerPopulation.population;
+            List<Genotype> genEnemies = _enemyPopulation.genetics;
+            List<Phenotype> phsEnemies = _enemyPopulation.population;
+            for (int i = 0; i < PopulationSize; ++i)
+            {
+                _players[i].SetNeat(phPlayers[i], genPlayers[i]);
+                _enemies[i].SetNeat(phsEnemies[i], genEnemies[i]);
+            }
+            
+        }
         private void InstantiatePlatforms()
         {
             var gap = 50;

@@ -38,18 +38,18 @@ namespace NEAT
 
         public override bool AttackCondition()
         {
-            return actions[2] > 0;
+            return actions[2] > 0.5f;
         }
 
         protected override float GetInputVertical()
         {
             getNeatOutput();
-            return actions[0];
+            return 2*(actions[0])-1;
         }
 
         protected override float GetInputHorizontal()
         {
-            return actions[1];
+            return 2*actions[1]-1;
         }
 
         /// <summary>
