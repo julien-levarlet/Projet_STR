@@ -103,10 +103,15 @@ public class GameManager : MonoBehaviour
         }
 
         int index=0;
-        for (; index<enemies.Length; ++index)
+        for (; index < enemies.Length; ++index)
+        {
             enemies[index].GetComponent<AgentController>().SetPos(_validPositions[index]);
-        
+            enemies[index].GetComponent<AgentController>().life = AgentController.MaxLife;
+        }
+
+
         player.GetComponent<AgentController>().SetPos(_validPositions[index]);
+        player.GetComponent<AgentController>().life = AgentController.MaxLife;
         
         // placement du point de victoire
         victory.transform.position = _validPositions[++index];
@@ -120,8 +125,7 @@ public class GameManager : MonoBehaviour
                 victory.gameObject.transform.position);
             if (distProche > dist)
             {
-                float ecart = distProche - dist;
-                player.GetComponent<AgentController>().Reward(ecart);
+                player.GetComponent<AgentController>().Reward(distProche - dist);
                 distProche = dist;
             }
             
@@ -134,12 +138,16 @@ public class GameManager : MonoBehaviour
             {
                 player.GetComponent<AgentController>().Reward(3);
             }
+            //donne des points à l'ennemi en fonctin du temps et plus le joueur est blessé
+            enemies[0].GetComponent<AgentController>().Reward(2);
+            enemies[0].GetComponent<NeatAgent>().Reward(3*(AgentController.MaxLife-enemies[0].GetComponent<AgentController>().life));
+        
+            //donne des points au joueur tant qu'il n'est pas blessé
+            if (player.GetComponent<AgentController>().life==AgentController.MaxLife)
+            {
+                player.GetComponent<NeatAgent>().Reward(3);
+            }
         }
-
-        //Mise a jour alive
-        //Si ennemi meurt passe à false
-        //Mise a jour distProche
-        //Si jamais distance joueur objectif a diminué donne point au joueur de la distance diminuée * 10 
 
         // redemarrage de la position des agents
         if (Input.GetKey(KeyCode.P))
@@ -165,7 +173,7 @@ public class GameManager : MonoBehaviour
             case GameState.InProgress:
                 break;
             case GameState.StageCleared:
-                
+                NotifyLearningManager();
                 break;
             case GameState.Victory:
                 PlayerWon();
@@ -190,7 +198,7 @@ public class GameManager : MonoBehaviour
        // playerr.Reward(1000/Temps passé);
        for (int i = 0; i < enemies.Length; i++)
        {
-           if (enemies[i].GetComponent<AgentController>()._life == 0)
+           if (enemies[i].GetComponent<AgentController>().life == 0)
            {
                player.GetComponent<AgentController>().Reward(50);
            }
@@ -212,7 +220,7 @@ public class GameManager : MonoBehaviour
         
         for (int i = 0; i < enemies.Length; i++)
         {
-            if (enemies[i].GetComponent<AgentController>()._life == 0)
+            if (enemies[i].GetComponent<AgentController>().life <= 0)
             {
                 player.GetComponent<AgentController>().Reward(50);
             }
