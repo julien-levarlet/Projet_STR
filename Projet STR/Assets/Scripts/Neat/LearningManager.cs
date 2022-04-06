@@ -81,7 +81,6 @@ namespace NEAT
                 _players[i].SetNeat(phPlayers[i], genPlayers[i]);
                 _enemies[i].SetNeat(phsEnemies[i], genEnemies[i]);
             }
-            NewGeneration();
         }
 
         /// <summary>
@@ -133,6 +132,7 @@ namespace NEAT
 
         public void GameFinished()
         {
+            Debug.Log(gameFinished+" parties finies");
             gameFinished += 1;
         }
 
@@ -147,8 +147,17 @@ namespace NEAT
                     gm.SetPositions();
                     gm.UpdateGameState(GameState.InProgress);
                 }
-                Debug.Log("New Generation");
+                Debug.Log("Génération numéro " + _playerPopulation.GENERATION);
                 beginTime = Time.time;
+            }
+
+            if (Input.GetKey(KeyCode.A))
+            {
+                Time.timeScale = 1;
+            }
+            else
+            {
+                Time.timeScale = 4;
             }
         }
     }

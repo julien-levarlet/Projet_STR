@@ -145,7 +145,7 @@ MonoBehaviour:
   speed: 500
   rotSpeed: 300
   target: {fileID: 1336776578283379682}
-  _life: 0
+  life: 0
   saveFile: 
   victoryTarget: {fileID: 1039899223573211535}
 --- !u!1001 &1681409324965394795
@@ -301,6 +301,10 @@ PrefabInstance:
       propertyPath: victory
       value: 
       objectReference: {fileID: 3238326566466089434}
+    - target: {fileID: 407990120600988753, guid: a1207389036527548bd1edade353b49d, type: 3}
+      propertyPath: isTraining
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 407990120600988753, guid: a1207389036527548bd1edade353b49d, type: 3}
       propertyPath: spawns.Array.size
       value: 4
@@ -574,7 +578,7 @@ MonoBehaviour:
   speed: 500
   rotSpeed: 300
   target: {fileID: 1336776578283379682}
-  _life: 0
+  life: 0
   saveFile: 
   victoryTarget: {fileID: 1039899223573211535}
 --- !u!1001 &5934604060776561004

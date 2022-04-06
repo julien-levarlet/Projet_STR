@@ -409,4 +409,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   platformPrefab: {fileID: 7785005458672411800, guid: 62d53d737722438418a5079e67e24280, type: 3}
-  gameDuration: 30
+  gameDuration: 10

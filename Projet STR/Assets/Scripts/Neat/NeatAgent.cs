@@ -22,6 +22,7 @@ namespace NEAT
         {
             neatPhenotype = ph;
             neatGenotype = gen;
+            neatGenotype.fitness = 0.1f; // évite les problèmes de fitnesse nulle
         }
 
         public void getNeatOutput()

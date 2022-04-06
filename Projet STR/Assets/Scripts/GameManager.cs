@@ -43,9 +43,8 @@ public class GameManager : MonoBehaviour
         //player = GameObject.Find("Player");
         //enemies = GameObject.FindGameObjectsWithTag("Enemy");
         //var positions = GameObject.FindGameObjectsWithTag("Spawn");
-        distProche = Vector3.Distance(player.GetComponent<AgentController>().target.position,victory.gameObject.transform.position);
-        isTraining = false;
-        
+        distProche = Vector3.Distance(player.transform.position,victory.gameObject.transform.position);
+
         _validPositions = new Vector3[spawns.Length];
         
         for (int i=0; i<spawns.Length; ++i)
@@ -70,10 +69,13 @@ public class GameManager : MonoBehaviour
             Debug.LogError("Il n'y a pas de joueur dans la scene");
             return;
         }
-        
-        Debug.Log("Joueur :" + player);
-        Debug.Log("Nombre d'ennemis : " + enemies.Length);
-        Debug.Log("Nombre de point de spawn : " + _validPositions.Length);
+
+        if (!isTraining)
+        {
+            Debug.Log("Joueur :" + player);
+            Debug.Log("Nombre d'ennemis : " + enemies.Length);
+            Debug.Log("Nombre de point de spawn : " + _validPositions.Length);
+        }
 
         SetPositions();
     }
@@ -87,12 +89,19 @@ public class GameManager : MonoBehaviour
     {
         // On mélange la liste des position pour en affecter une alétoire pour chaque agent
         // https://stackoverflow.com/questions/14473321/generating-random-unique-values-c-sharp
-        if(!player.activeSelf)
+        if (!player.activeSelf)
+        {
             player.SetActive(true);
+            player.GetComponent<AgentController>().life = AgentController.MaxLife;
+        }
+
         foreach (var en in enemies)
         {
-            if(!en.activeSelf)
+            if (!en.activeSelf)
+            {
                 en.SetActive(true);
+                en.GetComponent<AgentController>().life = AgentController.MaxLife;
+            }
         }
         
         var rnd = new Random();
@@ -109,7 +118,6 @@ public class GameManager : MonoBehaviour
             enemies[index].GetComponent<AgentController>().life = AgentController.MaxLife;
         }
 
-
         player.GetComponent<AgentController>().SetPos(_validPositions[index]);
         player.GetComponent<AgentController>().life = AgentController.MaxLife;
         
@@ -121,31 +129,22 @@ public class GameManager : MonoBehaviour
     {
         if (isTraining) // En cas d'entrainement
         {
-            float dist = Vector3.Distance(player.GetComponent<AgentController>().target.position,
+            float dist = Vector3.Distance(player.transform.position,
                 victory.gameObject.transform.position);
             if (distProche > dist)
             {
-                player.GetComponent<AgentController>().Reward(distProche - dist);
+                player.GetComponent<NeatAgent>().Reward(distProche - dist);
                 distProche = dist;
             }
             
-            //donne des points à l'ennemi en fonctin du temps et plus le joueur est blessé
-            enemies[0].GetComponent<AgentController>().Reward(2);
-            enemies[0].GetComponent<AgentController>().Reward(3*(AgentController.MaxLife-enemies[0].GetComponent<AgentController>().life));
-        
-            //donne des points au joueur tant qu'il n'est pas blessé
-            if (player.GetComponent<AgentController>().life==AgentController.MaxLife)
-            {
-                player.GetComponent<AgentController>().Reward(3);
-            }
-            //donne des points à l'ennemi en fonctin du temps et plus le joueur est blessé
-            enemies[0].GetComponent<AgentController>().Reward(2);
+            //donne des points à l'ennemi en fonction du temps et plus le joueur est blessé
+            enemies[0].GetComponent<NeatAgent>().Reward(2);
             enemies[0].GetComponent<NeatAgent>().Reward(3*(AgentController.MaxLife-enemies[0].GetComponent<AgentController>().life));
         
             //donne des points au joueur tant qu'il n'est pas blessé
             if (player.GetComponent<AgentController>().life==AgentController.MaxLife)
             {
-                player.GetComponent<NeatAgent>().Reward(3);
+                //player.GetComponent<NeatAgent>().Reward(3);
             }
         }
 
@@ -164,6 +163,9 @@ public class GameManager : MonoBehaviour
 
     public void UpdateGameState(GameState state)
     {
+        if (_state == state)
+            return;
+        
         _state = state;
 
         switch(state)
@@ -190,9 +192,9 @@ public class GameManager : MonoBehaviour
 
     public void PlayerWon()
     {
-        Debug.Log("Le joueur a gagné");
+        //Debug.Log("Le joueur a gagné");
         //update fitness
-        player.GetComponent<AgentController>().Reward(10000);
+        player.GetComponent<NeatAgent>().Reward(10000);
         
         //reward joueur avec le temps
        // playerr.Reward(1000/Temps passé);
@@ -200,7 +202,7 @@ public class GameManager : MonoBehaviour
        {
            if (enemies[i].GetComponent<AgentController>().life == 0)
            {
-               player.GetComponent<AgentController>().Reward(50);
+               player.GetComponent<NeatAgent>().Reward(50);
            }
        }
        
@@ -214,19 +216,19 @@ public class GameManager : MonoBehaviour
 
     public void PlayerLost()
     {
-        Debug.Log("Le joueur a perdu");
+        //Debug.Log("Le joueur a perdu");
         //update fitness
-        enemies[0].GetComponent<AgentController>().Reward(10000);
+        enemies[0].GetComponent<NeatAgent>().Reward(10000);
         
         for (int i = 0; i < enemies.Length; i++)
         {
             if (enemies[i].GetComponent<AgentController>().life <= 0)
             {
-                player.GetComponent<AgentController>().Reward(50);
+                player.GetComponent<NeatAgent>().Reward(50);
             }
         }
         
-        if (isTraining)
+        if (!isTraining)
             Restart();
         else
         {
