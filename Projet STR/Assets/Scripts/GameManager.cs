@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using NEAT;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 using UnityEngine.SceneManagement;
 using Random = System.Random;
 
@@ -32,6 +33,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject victory;
     private Vector3[] _validPositions;
     private float distProche;
+    private bool isTraining;
 
     public static event Action<GameState> OnGameStateChanged;
 
@@ -42,7 +44,8 @@ public class GameManager : MonoBehaviour
         //enemies = GameObject.FindGameObjectsWithTag("Enemy");
         //var positions = GameObject.FindGameObjectsWithTag("Spawn");
         distProche = Vector3.Distance(player.GetComponent<AgentController>().target.position,victory.gameObject.transform.position);
-
+        isTraining = false;
+        
         _validPositions = new Vector3[spawns.Length];
         
         for (int i=0; i<spawns.Length; ++i)
@@ -80,10 +83,18 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
-    private void SetPositions()
+    public void SetPositions()
     {
         // On mélange la liste des position pour en affecter une alétoire pour chaque agent
         // https://stackoverflow.com/questions/14473321/generating-random-unique-values-c-sharp
+        if(!player.activeSelf)
+            player.SetActive(true);
+        foreach (var en in enemies)
+        {
+            if(!en.activeSelf)
+                en.SetActive(true);
+        }
+        
         var rnd = new Random();
         for (int i = 0;i < _validPositions.Length;++i)
         {
@@ -103,15 +114,28 @@ public class GameManager : MonoBehaviour
     
     private void Update()
     {
-        float dist = Vector3.Distance(player.GetComponent<AgentController>().target.position,
-            victory.gameObject.transform.position);
-        if (distProche > dist)
+        if (isTraining) // En cas d'entrainement
         {
-            float ecart = distProche - dist;
-            player.GetComponent<NeatAgent>().Reward(ecart);
-            distProche = dist;
-        }
+            float dist = Vector3.Distance(player.GetComponent<AgentController>().target.position,
+                victory.gameObject.transform.position);
+            if (distProche > dist)
+            {
+                float ecart = distProche - dist;
+                player.GetComponent<AgentController>().Reward(ecart);
+                distProche = dist;
+            }
+            
+            //donne des points à l'ennemi en fonctin du temps et plus le joueur est blessé
+            enemies[0].GetComponent<AgentController>().Reward(2);
+            enemies[0].GetComponent<AgentController>().Reward(3*(AgentController.MaxLife-enemies[0].GetComponent<AgentController>()._life));
         
+            //donne des points au joueur tant qu'il n'est pas blessé
+            if (player.GetComponent<AgentController>()._life==AgentController.MaxLife)
+            {
+                player.GetComponent<AgentController>().Reward(3);
+            }
+        }
+
         //Mise a jour alive
         //Si ennemi meurt passe à false
         //Mise a jour distProche
@@ -123,21 +147,11 @@ public class GameManager : MonoBehaviour
         // redemarrage de la partie
         if (Input.GetKey(KeyCode.R))
             Restart();
-        
+
         if (!player.activeSelf)
         {
             UpdateGameState(GameState.Lose);
         }
-        //donne des points à l'ennemi en fonctin du temps et plus le joueur est blessé
-        enemies[0].GetComponent<AgentController>().Reward(2);
-        enemies[0].GetComponent<NeatAgent>().Reward(3*(AgentController.MaxLife-enemies[0].GetComponent<AgentController>()._life));
-        
-        //donne des points au joueur tant qu'il n'est pas blessé
-        if (player.GetComponent<AgentController>()._life==AgentController.MaxLife)
-        {
-            player.GetComponent<NeatAgent>().Reward(3);
-        }
-        
     }
 
     public void UpdateGameState(GameState state)
@@ -151,6 +165,7 @@ public class GameManager : MonoBehaviour
             case GameState.InProgress:
                 break;
             case GameState.StageCleared:
+                
                 break;
             case GameState.Victory:
                 PlayerWon();
@@ -180,8 +195,13 @@ public class GameManager : MonoBehaviour
                player.GetComponent<AgentController>().Reward(50);
            }
        }
-        //renvoi fitness au RDN
-        Restart();
+       
+        if (!isTraining)
+            Restart();
+        else
+        {
+            UpdateGameState(GameState.StageCleared);
+        }
     }
 
     public void PlayerLost()
@@ -197,8 +217,18 @@ public class GameManager : MonoBehaviour
                 player.GetComponent<AgentController>().Reward(50);
             }
         }
-        //renvoi fitness au RDN
-        Restart();
+        
+        if (isTraining)
+            Restart();
+        else
+        {
+            UpdateGameState(GameState.StageCleared);
+        }
+    }
+
+    private void NotifyLearningManager()
+    {
+        LearningManager.GetInstance().GameFinished();
     }
 
 

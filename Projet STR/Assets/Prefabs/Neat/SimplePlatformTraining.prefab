@@ -145,6 +145,7 @@ MonoBehaviour:
   speed: 500
   rotSpeed: 300
   target: {fileID: 1336776578283379682}
+  _life: 0
   saveFile: 
   victoryTarget: {fileID: 1039899223573211535}
 --- !u!1001 &1681409324965394795
@@ -378,11 +379,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a1207389036527548bd1edade353b49d, type: 3}
---- !u!1 &9174155897164883161 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6194199029901837599, guid: a1207389036527548bd1edade353b49d, type: 3}
-  m_PrefabInstance: {fileID: 3073444089267429830}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &9174155897164883165 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6194199029901837595, guid: a1207389036527548bd1edade353b49d, type: 3}
@@ -393,33 +389,12 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 407990120600988753, guid: a1207389036527548bd1edade353b49d, type: 3}
   m_PrefabInstance: {fileID: 3073444089267429830}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9174155897164883161}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0007ab050cce420eb1f0fcacb6ebf750, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &146435572710743541
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9174155897164883161}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0007ab050cce420eb1f0fcacb6ebf750, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  spawns:
-  - {fileID: 5784481866510123189}
-  - {fileID: 7472658734192533331}
-  - {fileID: 1928536089692316197}
-  - {fileID: 4530674650688909185}
-  player: {fileID: 1336776578283379710}
-  enemies:
-  - {fileID: 6274164466511645678}
-  victory: {fileID: 3238326566466089434}
 --- !u!1001 &3399175582377362458
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -599,6 +574,7 @@ MonoBehaviour:
   speed: 500
   rotSpeed: 300
   target: {fileID: 1336776578283379682}
+  _life: 0
   saveFile: 
   victoryTarget: {fileID: 1039899223573211535}
 --- !u!1001 &5934604060776561004

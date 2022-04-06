@@ -4,6 +4,10 @@ using UnityEngine;
 
 namespace NEAT
 {
+    /// <summary>
+    /// Regroupement de la gestion de la population de l'algorithme neat, avec les objets de Unity
+    /// Implémente le design pattern singletton
+    /// </summary>
     public class LearningManager: MonoBehaviour
     {
         private const int Inputs = 6; // notre position, position du joueur et position de l'objectif
@@ -11,11 +15,34 @@ namespace NEAT
         private const int PopulationSize = 50;
 
         [SerializeField] private GameObject platformPrefab;
+        [SerializeField] private int gameDuration = 30; // temps d'une génération en secondes
         private NeatAgent[] _players;
         private NeatAgent[] _enemies;
         private Population _playerPopulation;
         private Population _enemyPopulation;
-        
+        private GameManager[] _gameManagers;
+        private int gameFinished;
+        private float beginTime;
+
+        private static LearningManager _instance;
+
+        private void Awake()
+        {
+            if (_instance==null)
+            {
+                _instance = this;
+            }
+            else
+            {
+                Debug.LogError("Plusieurs instantiations de Learning Manager interdites");
+            }
+        }
+
+        public static LearningManager GetInstance()
+        {
+            return _instance;
+        }
+
         private void Start()
         {
             // Création des singletons
@@ -39,6 +66,14 @@ namespace NEAT
             List<Phenotype> phPlayers = _playerPopulation.population;
             List<Genotype> genEnemies = _playerPopulation.genetics;
             List<Phenotype> phsEnemies = _playerPopulation.population;
+
+            _gameManagers = (GameManager[])FindObjectsOfType(typeof(GameManager));
+            gameFinished = 0;
+            
+            foreach (var gm in _gameManagers)
+            {
+                gm.UpdateGameState(GameState.InProgress);
+            }
 
             // Association de Neat aux object dans la scene
             for (int i = 0; i < PopulationSize; ++i)
@@ -75,6 +110,34 @@ namespace NEAT
             {
                 _players[i] = objP[i].gameObject.GetComponent<NeatAgent>();
                 _enemies[i] = objE[i].gameObject.GetComponent<NeatAgent>();
+            }
+
+            beginTime = Time.time;
+        }
+
+        private void NewGeneration()
+        {
+            
+        }
+
+        public void GameFinished()
+        {
+            gameFinished += 1;
+        }
+
+        private void Update()
+        {
+            if (gameFinished >= PopulationSize || Time.time > beginTime + gameDuration)
+            {
+                gameFinished = 0;
+                NewGeneration();
+                foreach (var gm in _gameManagers)
+                {
+                    gm.SetPositions();
+                    gm.UpdateGameState(GameState.InProgress);
+                }
+                Debug.Log("New Generation");
+                beginTime = Time.time;
             }
         }
     }

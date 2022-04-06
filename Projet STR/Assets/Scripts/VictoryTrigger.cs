@@ -7,6 +7,6 @@ public class VictoryTrigger :MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if(other.gameObject.name == "Player")
-            gameManager.PlayerWon();
+            gameManager.UpdateGameState(GameState.Victory);
     }
 }
