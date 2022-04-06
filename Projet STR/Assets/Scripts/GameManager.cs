@@ -156,6 +156,7 @@ public class GameManager : MonoBehaviour
         if (Input.GetKey(KeyCode.R))
             Restart();
 
+        // verifier si le joueur est mort
         if (!player.activeSelf)
         {
             UpdateGameState(GameState.Lose);
@@ -193,46 +194,49 @@ public class GameManager : MonoBehaviour
 
     public void PlayerWon()
     {
-        //Debug.Log("Le joueur a gagné");
-        //update fitness
-        player.GetComponent<NeatAgent>().Reward(10000);
-        
-        //reward joueur avec le temps
-       // playerr.Reward(1000/Temps passé);
-       for (int i = 0; i < enemies.Length; i++)
-       {
-           if (enemies[i].GetComponent<AgentController>().life == 0)
-           {
-               player.GetComponent<NeatAgent>().Reward(50);
-           }
-       }
+        Debug.Log("Le joueur a gagné");
        
         if (!isTraining)
+            
             Restart();
         else
         {
+            //update fitness
+            player.GetComponent<NeatAgent>().Reward(10000);
+
+            //reward joueur avec le temps
+            // playerr.Reward(1000/Temps passé);
+            for (int i = 0; i < enemies.Length; i++)
+            {
+                if (enemies[i].GetComponent<AgentController>().life == 0)
+                {
+                    player.GetComponent<NeatAgent>().Reward(50);
+                }
+            }
+
             UpdateGameState(GameState.StageCleared);
         }
     }
 
     public void PlayerLost()
     {
-        //Debug.Log("Le joueur a perdu");
+        Debug.Log("Le joueur a perdu");
         //update fitness
-        enemies[0].GetComponent<NeatAgent>().Reward(10000);
-        
-        for (int i = 0; i < enemies.Length; i++)
-        {
-            if (enemies[i].GetComponent<AgentController>().life <= 0)
-            {
-                player.GetComponent<NeatAgent>().Reward(50);
-            }
-        }
         
         if (!isTraining)
             Restart();
         else
         {
+            enemies[0].GetComponent<NeatAgent>().Reward(10000);
+
+            for (int i = 0; i < enemies.Length; i++)
+            {
+                if (enemies[i].GetComponent<AgentController>().life <= 0)
+                {
+                    player.GetComponent<NeatAgent>().Reward(50);
+                }
+            }
+
             UpdateGameState(GameState.StageCleared);
         }
     }
