@@ -33,7 +33,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject victory;
     private Vector3[] _validPositions;
     private float distProche;
-    private bool isTraining;
+    [SerializeField] private bool isTraining;
 
     public static event Action<GameState> OnGameStateChanged;
 
@@ -74,7 +74,7 @@ public class GameManager : MonoBehaviour
         Debug.Log("Joueur :" + player);
         Debug.Log("Nombre d'ennemis : " + enemies.Length);
         Debug.Log("Nombre de point de spawn : " + _validPositions.Length);
-        
+
         SetPositions();
     }
 
@@ -131,10 +131,10 @@ public class GameManager : MonoBehaviour
             
             //donne des points à l'ennemi en fonctin du temps et plus le joueur est blessé
             enemies[0].GetComponent<AgentController>().Reward(2);
-            enemies[0].GetComponent<AgentController>().Reward(3*(AgentController.MaxLife-enemies[0].GetComponent<AgentController>()._life));
+            enemies[0].GetComponent<AgentController>().Reward(3*(AgentController.MaxLife-enemies[0].GetComponent<AgentController>().life));
         
             //donne des points au joueur tant qu'il n'est pas blessé
-            if (player.GetComponent<AgentController>()._life==AgentController.MaxLife)
+            if (player.GetComponent<AgentController>().life==AgentController.MaxLife)
             {
                 player.GetComponent<AgentController>().Reward(3);
             }

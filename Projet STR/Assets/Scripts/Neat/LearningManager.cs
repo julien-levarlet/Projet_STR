@@ -81,6 +81,7 @@ namespace NEAT
                 _players[i].SetNeat(phPlayers[i], genPlayers[i]);
                 _enemies[i].SetNeat(phsEnemies[i], genEnemies[i]);
             }
+            NewGeneration();
         }
 
         /// <summary>
@@ -100,7 +101,6 @@ namespace NEAT
                 _players[i].SetNeat(phPlayers[i], genPlayers[i]);
                 _enemies[i].SetNeat(phsEnemies[i], genEnemies[i]);
             }
-            
         }
         private void InstantiatePlatforms()
         {
@@ -129,11 +129,6 @@ namespace NEAT
             }
 
             beginTime = Time.time;
-        }
-
-        private void NewGeneration()
-        {
-            
         }
 
         public void GameFinished()
