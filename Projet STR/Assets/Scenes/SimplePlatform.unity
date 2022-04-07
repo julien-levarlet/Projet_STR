@@ -358,6 +358,7 @@ PrefabInstance:
       objectReference: {fileID: 858804312}
     m_RemovedComponents:
     - {fileID: 3202506456689569308, guid: 5e8edcc407259df46b30c5a5cf2dcd46, type: 3}
+    - {fileID: 8079543965085099849, guid: 5e8edcc407259df46b30c5a5cf2dcd46, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 5e8edcc407259df46b30c5a5cf2dcd46, type: 3}
 --- !u!20 &373526667 stripped
 Camera:
@@ -782,7 +783,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-3682
+  m_Name: pb_Mesh-397872
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -1238,6 +1239,24 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 1511634704532267262, guid: 5e8edcc407259df46b30c5a5cf2dcd46, type: 3}
   m_PrefabInstance: {fileID: 245886168}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1528639357
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1528639356}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78b4bc533e734e4abc505c35e75d6761, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 500
+  rotSpeed: 300
+  target: {fileID: 858804312}
+  life: 1
+  isTraining: 0
+  victoryTarget: {fileID: 2011419896}
 --- !u!1 &1529255259
 GameObject:
   m_ObjectHideFlags: 0
@@ -1582,6 +1601,11 @@ LightingSettings:
 --- !u!1 &2011419893 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4297920608735103153, guid: 3a3809204e82edd419681ddd890ec67c, type: 3}
+  m_PrefabInstance: {fileID: 1817822502}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &2011419896 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1818299809222512868, guid: 3a3809204e82edd419681ddd890ec67c, type: 3}
   m_PrefabInstance: {fileID: 1817822502}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2102767531

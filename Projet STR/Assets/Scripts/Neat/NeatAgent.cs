@@ -1,3 +1,7 @@
+using System;
+using System.Globalization;
+using System.IO;
+using System.Text;
 using UnityEngine;
 
 namespace NEAT
@@ -7,11 +11,21 @@ namespace NEAT
     /// </summary>
     public class NeatAgent : AgentController
     {
-        [SerializeField] protected string saveFile;
+        protected string saveFile = "Assets/Resources/save.txt";
+        [SerializeField] private bool isTraining;
         [SerializeField] private Transform victoryTarget;
         protected Phenotype neatPhenotype;
         protected Genotype neatGenotype;
         private float[] actions = {0f, 0f, 0f};
+
+        protected override void Start()
+        {
+            base.Start();
+            if (!isTraining)
+            {
+                Load(); // initialise le genetype et phénotype par ceux présent en mémoire
+            }
+        }
 
         /// <summary>
         /// Associe le joueur à son réseau 
@@ -25,16 +39,17 @@ namespace NEAT
             neatGenotype.fitness = 0.1f; // évite les problèmes de fitnesse nulle
         }
 
-        public void getNeatOutput()
+        public void GetNeatOutput()
         {
             if (neatPhenotype == null) return;
             
+            // création de l'entrée du réseau
             float[] input =
             {
-                transform.localPosition.x, transform.localPosition.z, target.localPosition.x, target.localPosition.z,
+                transform.eulerAngles.y, transform.localPosition.x, transform.localPosition.z, target.localPosition.x, target.localPosition.z,
                 victoryTarget.localPosition.x, victoryTarget.localPosition.z
             };
-            actions = neatPhenotype.Propagate(input);
+            actions = neatPhenotype.Propagate(input); // on récupère la sortie
         }
 
         public override bool AttackCondition()
@@ -44,7 +59,7 @@ namespace NEAT
 
         protected override float GetInputVertical()
         {
-            getNeatOutput();
+            GetNeatOutput();
             return 2*(actions[0])-1;
         }
 
@@ -59,6 +74,90 @@ namespace NEAT
         public override void Reward(float reward)
         {
             neatGenotype.fitness += reward;
+        }
+        
+        /// <summary>
+        /// Ecriture en mémoire des caractéristique du réseau de l'agent, pour l'utiliser plus tard.
+        /// Code adapté de l'exemple du monopoly
+        /// </summary>
+        public void Save()
+        {
+            StringBuilder sb = new StringBuilder(100);
+            int vertices = neatGenotype.vertices.Count;
+
+            for (int k = 0; k < vertices; k++)
+            {
+                sb.Append(neatGenotype.vertices[k].index.ToString(CultureInfo.InvariantCulture) + ',');
+                sb.Append(neatGenotype.vertices[k].type.ToString(CultureInfo.InvariantCulture) + ',');
+            }
+
+            sb.Append('#');
+
+            int edges = neatGenotype.edges.Count;
+
+            for (int k = 0; k < edges; k++)
+            {
+                sb.Append(neatGenotype.edges[k].source.ToString(CultureInfo.InvariantCulture) + ',');
+                sb.Append(neatGenotype.edges[k].destination.ToString(CultureInfo.InvariantCulture) + ',');
+                sb.Append(neatGenotype.edges[k].weight.ToString(CultureInfo.InvariantCulture) + ','); // normalement pas de problème de virgule ici
+                sb.Append(neatGenotype.edges[k].enabled.ToString(CultureInfo.InvariantCulture) + ',');
+                sb.Append(neatGenotype.edges[k].innovation.ToString(CultureInfo.InvariantCulture) + ',');
+            }
+
+            using (StreamWriter sw = new StreamWriter(saveFile))
+            {
+                sw.AutoFlush = true; 
+                sw.WriteLine(sb);
+            }
+        }
+
+        /// <summary>
+        /// Charge le réseau enregistré pour une utilisation réelle.
+        /// Code adapté de l'exemple du monopoly
+        /// </summary>
+        public void Load()
+        {
+            neatGenotype = new Genotype();
+            neatPhenotype = new Phenotype();
+            
+            string network = "";
+            using (StreamReader sr = new StreamReader(saveFile))
+            {
+                network = sr.ReadLine();
+            }
+
+            if (network == null)
+                throw new Exception("Fichier de sauvegarde non trouvé");
+            
+            string[] nparts = network.Split('#');
+
+            string verts = nparts[0];
+            string[] vparts = verts.Split(',');
+
+            for (int j = 0; j < vparts.GetLength(0) - 1; j += 2)
+            {
+                int index = int.Parse(vparts[j],CultureInfo.InvariantCulture);
+                VertexInfo.EType type = (VertexInfo.EType)Enum.Parse(typeof(NEAT.VertexInfo.EType), vparts[j + 1]);
+
+                neatGenotype.AddVertex(type, index);
+            }
+
+            string edges = nparts[1];
+            string[] eparts = edges.Split(',');
+
+            for (int j = 0; j < eparts.GetLength(0) - 1; j += 5)
+            {
+                int source = int.Parse(eparts[j],CultureInfo.InvariantCulture);
+                int destination = int.Parse(eparts[j + 1],CultureInfo.InvariantCulture);
+                float weight = float.Parse(eparts[j + 2],CultureInfo.InvariantCulture);
+                bool b = bool.Parse(eparts[j + 3]);
+                int innovation = int.Parse(eparts[j + 4],CultureInfo.InvariantCulture);
+
+                neatGenotype.AddEdge(source, destination, weight, b, innovation);
+            }
+            
+            neatPhenotype.InscribeGenotype(neatGenotype);
+            neatPhenotype.ProcessGraph();
         }
     }
 }

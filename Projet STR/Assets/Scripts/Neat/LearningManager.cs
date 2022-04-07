@@ -10,7 +10,7 @@ namespace NEAT
     /// </summary>
     public class LearningManager: MonoBehaviour
     {
-        private const int Inputs = 6; // notre position, position du joueur et position de l'objectif
+        private const int Inputs = 7; // notre angle, notre position, position du joueur et position de l'objectif
         private const int Outputs = 3;
         [SerializeField] const int PopulationSize = 200;
 
@@ -132,8 +132,8 @@ namespace NEAT
 
         public void GameFinished()
         {
-            Debug.Log(gameFinished+" parties finies");
             gameFinished += 1;
+            Debug.Log(gameFinished+" parties finies");
         }
 
         private void Update()
@@ -151,13 +151,18 @@ namespace NEAT
                 beginTime = Time.time;
             }
 
-            if (Input.GetKey(KeyCode.A))
+            if (Input.GetKey(KeyCode.A)) // gestion de la rapidité d'écoulement du temps
             {
                 Time.timeScale = 1;
             }
             else
             {
-                Time.timeScale = 60;
+                Time.timeScale = 10;
+            }
+
+            if (Input.GetKeyDown(KeyCode.S) || _playerPopulation.GENERATION % 50 == 0) // enregistrement des IAs
+            {
+                _enemies[0].Save();
             }
         }
     }

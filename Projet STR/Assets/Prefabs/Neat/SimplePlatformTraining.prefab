@@ -146,7 +146,7 @@ MonoBehaviour:
   rotSpeed: 300
   target: {fileID: 1336776578283379682}
   life: 0
-  saveFile: 
+  saveFile: {fileID: 0}
   victoryTarget: {fileID: 1039899223573211535}
 --- !u!1001 &1681409324965394795
 PrefabInstance:
@@ -579,7 +579,7 @@ MonoBehaviour:
   rotSpeed: 300
   target: {fileID: 1336776578283379682}
   life: 0
-  saveFile: 
+  saveFile: {fileID: 4900000, guid: 0e9607210b3d3574a9157f0aa66bc1fc, type: 3}
   victoryTarget: {fileID: 1039899223573211535}
 --- !u!1001 &5934604060776561004
 PrefabInstance:
