@@ -8,7 +8,7 @@ using UnityEngine;
 namespace NEAT
 {
     public class Species
-    {
+    { 
         public List<Genotype> members;
 
         public float topFitness = 0.0f;

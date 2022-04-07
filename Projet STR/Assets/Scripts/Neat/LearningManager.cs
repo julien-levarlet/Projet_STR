@@ -12,7 +12,7 @@ namespace NEAT
     {
         private const int Inputs = 6; // notre position, position du joueur et position de l'objectif
         private const int Outputs = 3;
-        private const int PopulationSize = 50;
+        [SerializeField] const int PopulationSize = 200;
 
         [SerializeField] private GameObject platformPrefab;
         [SerializeField] private int gameDuration = 30; // temps d'une génération en secondes
@@ -157,7 +157,7 @@ namespace NEAT
             }
             else
             {
-                Time.timeScale = 4;
+                Time.timeScale = 60;
             }
         }
     }

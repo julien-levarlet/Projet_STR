@@ -97,7 +97,7 @@ public class GameManager : MonoBehaviour
         foreach (var en in enemies)
         {
             en.SetActive(true);
-            en.GetComponent<AgentController>().life = 1;
+            en.GetComponent<AgentController>().life = AgentController.MaxLife;
         }
         
         var rnd = new Random();
@@ -139,11 +139,11 @@ public class GameManager : MonoBehaviour
             }
             
             //donne des points à l'ennemi en fonction du temps et plus le joueur est blessé
-            enemies[0].GetComponent<NeatAgent>().Reward(2);
-            enemies[0].GetComponent<NeatAgent>().Reward(3*(AgentController.MaxLife-enemies[0].GetComponent<AgentController>().life));
+            //enemies[0].GetComponent<NeatAgent>().Reward(2);
+            enemies[0].GetComponent<NeatAgent>().Reward(3*(AgentController.MaxLife-player.GetComponent<AgentController>().life));
         
             //donne des points au joueur tant qu'il n'est pas blessé
-            if (player.GetComponent<AgentController>().life==AgentController.MaxLife)
+            //if (player.GetComponent<AgentController>().life==AgentController.MaxLife)
             {
                 //player.GetComponent<NeatAgent>().Reward(3);
             }
