@@ -12,7 +12,7 @@ namespace NEAT
     {
         private const int Inputs = 7; // notre angle, notre position, position du joueur et position de l'objectif
         private const int Outputs = 3;
-        [SerializeField] const int PopulationSize = 200;
+        public int populationSize = 200;
 
         [SerializeField] private GameObject platformPrefab;
         [SerializeField] private int gameDuration = 30; // temps d'une génération en secondes
@@ -21,8 +21,8 @@ namespace NEAT
         private Population _playerPopulation;
         private Population _enemyPopulation;
         private GameManager[] _gameManagers;
-        private int gameFinished;
-        private float beginTime;
+        private int _gameFinished;
+        private float _beginTime;
 
         private static LearningManager _instance;
 
@@ -53,12 +53,12 @@ namespace NEAT
             _playerPopulation = new Population();
             _enemyPopulation = new Population();
 
-            _players = new NeatAgent[PopulationSize];
-            _enemies = new NeatAgent[PopulationSize];
+            _players = new NeatAgent[populationSize];
+            _enemies = new NeatAgent[populationSize];
             
             // mise en place de la population
-            _playerPopulation.GenerateBasePopulation(PopulationSize, Inputs, Outputs);
-            _enemyPopulation.GenerateBasePopulation(PopulationSize, Inputs, Outputs);
+            _playerPopulation.GenerateBasePopulation(populationSize, Inputs, Outputs);
+            _enemyPopulation.GenerateBasePopulation(populationSize, Inputs, Outputs);
             
             InstantiatePlatforms();
 
@@ -68,7 +68,7 @@ namespace NEAT
             List<Phenotype> phsEnemies = _enemyPopulation.population;
 
             _gameManagers = (GameManager[])FindObjectsOfType(typeof(GameManager));
-            gameFinished = 0;
+            _gameFinished = 0;
             
             foreach (var gm in _gameManagers)
             {
@@ -76,7 +76,7 @@ namespace NEAT
             }
 
             // Association de Neat aux object dans la scene
-            for (int i = 0; i < PopulationSize; ++i)
+            for (int i = 0; i < populationSize; ++i)
             {
                 _players[i].SetNeat(phPlayers[i], genPlayers[i]);
                 _enemies[i].SetNeat(phsEnemies[i], genEnemies[i]);
@@ -95,7 +95,7 @@ namespace NEAT
             List<Phenotype> phPlayers = _playerPopulation.population;
             List<Genotype> genEnemies = _enemyPopulation.genetics;
             List<Phenotype> phsEnemies = _enemyPopulation.population;
-            for (int i = 0; i < PopulationSize; ++i)
+            for (int i = 0; i < populationSize; ++i)
             {
                 _players[i].SetNeat(phPlayers[i], genPlayers[i]);
                 _enemies[i].SetNeat(phsEnemies[i], genEnemies[i]);
@@ -105,10 +105,10 @@ namespace NEAT
         {
             var gap = 50;
             var gridSize = 10;
-            var maxX = gap * PopulationSize / gridSize / 2;
+            var maxX = gap * populationSize / gridSize / 2;
             var maxZ = gap * (gridSize - 1)/2;
             
-            for (float i = 0; i < PopulationSize; ++i)
+            for (float i = 0; i < populationSize; ++i)
             {
                 var x = Mathf.Floor(i / gridSize)  * gap - maxX;
                 var z = i % gridSize * gap - maxZ;
@@ -117,7 +117,7 @@ namespace NEAT
 
             var objP = GameObject.FindGameObjectsWithTag("Player");
             var objE = GameObject.FindGameObjectsWithTag("Enemy");
-            if (objE.Length != objP.Length && objP.Length != PopulationSize)
+            if (objE.Length != objP.Length && objP.Length != populationSize)
             {
                 throw new Exception("La taille de population correspond pas aux nombre d'objets instanciés");
             }
@@ -127,20 +127,20 @@ namespace NEAT
                 _enemies[i] = objE[i].gameObject.GetComponent<NeatAgent>();
             }
 
-            beginTime = Time.time;
+            _beginTime = Time.time;
         }
 
         public void GameFinished()
         {
-            gameFinished += 1;
-            Debug.Log(gameFinished+" parties finies");
+            _gameFinished += 1;
+            Debug.Log(_gameFinished+" parties finies");
         }
 
         private void Update()
         {
-            if (gameFinished >= PopulationSize || Time.time > beginTime + gameDuration)
+            if (_gameFinished >= populationSize || Time.time > _beginTime + gameDuration)
             {
-                gameFinished = 0;
+                _gameFinished = 0;
                 NewGeneration();
                 foreach (var gm in _gameManagers)
                 {
@@ -148,7 +148,7 @@ namespace NEAT
                     gm.UpdateGameState(GameState.InProgress);
                 }
                 Debug.Log("Génération numéro " + _playerPopulation.GENERATION);
-                beginTime = Time.time;
+                _beginTime = Time.time;
             }
 
             if (Input.GetKey(KeyCode.A)) // gestion de la rapidité d'écoulement du temps

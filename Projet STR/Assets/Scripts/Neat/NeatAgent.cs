@@ -11,12 +11,13 @@ namespace NEAT
     /// </summary>
     public class NeatAgent : AgentController
     {
-        protected string saveFile = "Assets/Resources/save.txt";
+        private const string SavePath = "Assets/Resources/";
+        [SerializeField] private string sceneName = "Nom de la scene";
         [SerializeField] private bool isTraining;
         [SerializeField] private Transform victoryTarget;
-        protected Phenotype neatPhenotype;
-        protected Genotype neatGenotype;
-        private float[] actions = {0f, 0f, 0f};
+        private Phenotype _neatPhenotype;
+        private Genotype _neatGenotype;
+        private float[] _actions = {0f, 0f, 0f};
 
         protected override void Start()
         {
@@ -34,14 +35,14 @@ namespace NEAT
         /// <param name="gen"></param>
         public void SetNeat(Phenotype ph, Genotype gen)
         {
-            neatPhenotype = ph;
-            neatGenotype = gen;
-            neatGenotype.fitness = 0.1f; // évite les problèmes de fitnesse nulle
+            _neatPhenotype = ph;
+            _neatGenotype = gen;
+            _neatGenotype.fitness = 0.1f; // évite les problèmes de fitnesse nulle
         }
 
         public void GetNeatOutput()
         {
-            if (neatPhenotype == null) return;
+            if (_neatPhenotype == null) return;
             
             // création de l'entrée du réseau
             float[] input =
@@ -49,23 +50,23 @@ namespace NEAT
                 transform.eulerAngles.y, transform.localPosition.x, transform.localPosition.z, target.localPosition.x, target.localPosition.z,
                 victoryTarget.localPosition.x, victoryTarget.localPosition.z
             };
-            actions = neatPhenotype.Propagate(input); // on récupère la sortie
+            _actions = _neatPhenotype.Propagate(input); // on récupère la sortie
         }
 
         public override bool AttackCondition()
         {
-            return actions[2] > 0.5f;
+            return _actions[2] > 0.5f;
         }
 
         protected override float GetInputVertical()
         {
             GetNeatOutput();
-            return 2*(actions[0])-1;
+            return 2*(_actions[0])-1;
         }
 
         protected override float GetInputHorizontal()
         {
-            return 2*actions[1]-1;
+            return 2*_actions[1]-1;
         }
 
         /// <summary>
@@ -73,7 +74,7 @@ namespace NEAT
         /// </summary>
         public override void Reward(float reward)
         {
-            neatGenotype.fitness += reward;
+            _neatGenotype.fitness += reward;
         }
         
         /// <summary>
@@ -83,27 +84,28 @@ namespace NEAT
         public void Save()
         {
             StringBuilder sb = new StringBuilder(100);
-            int vertices = neatGenotype.vertices.Count;
+            int vertices = _neatGenotype.vertices.Count;
 
             for (int k = 0; k < vertices; k++)
             {
-                sb.Append(neatGenotype.vertices[k].index.ToString(CultureInfo.InvariantCulture) + ',');
-                sb.Append(neatGenotype.vertices[k].type.ToString(CultureInfo.InvariantCulture) + ',');
+                sb.Append(_neatGenotype.vertices[k].index.ToString(CultureInfo.InvariantCulture) + ',');
+                sb.Append(_neatGenotype.vertices[k].type.ToString() + ',');
             }
 
             sb.Append('#');
 
-            int edges = neatGenotype.edges.Count;
+            int edges = _neatGenotype.edges.Count;
 
             for (int k = 0; k < edges; k++)
             {
-                sb.Append(neatGenotype.edges[k].source.ToString(CultureInfo.InvariantCulture) + ',');
-                sb.Append(neatGenotype.edges[k].destination.ToString(CultureInfo.InvariantCulture) + ',');
-                sb.Append(neatGenotype.edges[k].weight.ToString(CultureInfo.InvariantCulture) + ','); // normalement pas de problème de virgule ici
-                sb.Append(neatGenotype.edges[k].enabled.ToString(CultureInfo.InvariantCulture) + ',');
-                sb.Append(neatGenotype.edges[k].innovation.ToString(CultureInfo.InvariantCulture) + ',');
+                sb.Append(_neatGenotype.edges[k].source.ToString(CultureInfo.InvariantCulture) + ',');
+                sb.Append(_neatGenotype.edges[k].destination.ToString(CultureInfo.InvariantCulture) + ',');
+                sb.Append(_neatGenotype.edges[k].weight.ToString(CultureInfo.InvariantCulture) + ','); // normalement pas de problème de virgule ici
+                sb.Append(_neatGenotype.edges[k].enabled.ToString(CultureInfo.InvariantCulture) + ',');
+                sb.Append(_neatGenotype.edges[k].innovation.ToString(CultureInfo.InvariantCulture) + ',');
             }
 
+            var saveFile = SavePath + sceneName + ".txt";
             using (StreamWriter sw = new StreamWriter(saveFile))
             {
                 sw.AutoFlush = true; 
@@ -117,9 +119,10 @@ namespace NEAT
         /// </summary>
         public void Load()
         {
-            neatGenotype = new Genotype();
-            neatPhenotype = new Phenotype();
+            _neatGenotype = new Genotype();
+            _neatPhenotype = new Phenotype();
             
+            var saveFile = SavePath + sceneName + ".txt";
             string network = "";
             using (StreamReader sr = new StreamReader(saveFile))
             {
@@ -139,7 +142,7 @@ namespace NEAT
                 int index = int.Parse(vparts[j],CultureInfo.InvariantCulture);
                 VertexInfo.EType type = (VertexInfo.EType)Enum.Parse(typeof(NEAT.VertexInfo.EType), vparts[j + 1]);
 
-                neatGenotype.AddVertex(type, index);
+                _neatGenotype.AddVertex(type, index);
             }
 
             string edges = nparts[1];
@@ -153,11 +156,11 @@ namespace NEAT
                 bool b = bool.Parse(eparts[j + 3]);
                 int innovation = int.Parse(eparts[j + 4],CultureInfo.InvariantCulture);
 
-                neatGenotype.AddEdge(source, destination, weight, b, innovation);
+                _neatGenotype.AddEdge(source, destination, weight, b, innovation);
             }
             
-            neatPhenotype.InscribeGenotype(neatGenotype);
-            neatPhenotype.ProcessGraph();
+            _neatPhenotype.InscribeGenotype(_neatGenotype);
+            _neatPhenotype.ProcessGraph();
         }
     }
 }
