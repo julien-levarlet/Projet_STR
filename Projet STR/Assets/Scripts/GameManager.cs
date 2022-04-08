@@ -100,12 +100,12 @@ public class GameManager : MonoBehaviour
             en.GetComponent<AgentController>().life = AgentController.MaxLife;
         }
         
-        var rnd = new Random();
+        /*var rnd = new Random();
         for (int i = 0;i < _validPositions.Length;++i)
         {
             var randomIndex = rnd.Next(_validPositions.Length);
             (_validPositions[randomIndex], _validPositions[i]) = (_validPositions[i], _validPositions[randomIndex]);
-        }
+        }*/
 
         int index=0;
         for (; index < enemies.Length; ++index)
@@ -213,7 +213,8 @@ public class GameManager : MonoBehaviour
                     player.GetComponent<NeatAgent>().Reward(50);
                 }
             }
-
+            player.SetActive(false);
+            enemies[0].SetActive(false);
             UpdateGameState(GameState.StageCleared);
         }
     }
@@ -236,7 +237,8 @@ public class GameManager : MonoBehaviour
                     player.GetComponent<NeatAgent>().Reward(50);
                 }
             }
-
+            player.SetActive(false);
+            enemies[0].SetActive(false);
             UpdateGameState(GameState.StageCleared);
         }
     }
