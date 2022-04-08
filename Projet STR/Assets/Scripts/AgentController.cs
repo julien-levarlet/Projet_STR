@@ -99,13 +99,14 @@ public abstract class AgentController : MonoBehaviour
 
     public void SetPos(Vector3 pos)
     {
-        transform.position = pos;
         _defaultPosition = pos;
+        ResetPos();
     }
     
     public void ResetPos()
     {
         transform.position = _defaultPosition;
+        transform.rotation = Quaternion.identity;
     }
 
     public virtual void Victory()

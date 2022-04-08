@@ -783,7 +783,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-397872
+  m_Name: pb_Mesh-40094
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -1255,6 +1255,7 @@ MonoBehaviour:
   rotSpeed: 300
   target: {fileID: 858804312}
   life: 1
+  sceneName: SimplePlatform
   isTraining: 0
   victoryTarget: {fileID: 2011419896}
 --- !u!1 &1529255259
