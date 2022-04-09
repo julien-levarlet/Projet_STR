@@ -1874,6 +1874,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2415291730178606253, guid: 3a3809204e82edd419681ddd890ec67c, type: 3}
+      propertyPath: gameManager
+      value: 
+      objectReference: {fileID: 1240186868}
     - target: {fileID: 4297920608735103153, guid: 3a3809204e82edd419681ddd890ec67c, type: 3}
       propertyPath: m_Name
       value: Victory
