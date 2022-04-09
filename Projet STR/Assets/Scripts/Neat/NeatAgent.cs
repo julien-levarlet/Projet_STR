@@ -15,6 +15,7 @@ namespace NEAT
         [SerializeField] private string sceneName = "Nom de la scene";
         [SerializeField] private bool isTraining;
         [SerializeField] private Transform victoryTarget;
+        [SerializeField] private bool useDistance = true;
         private Phenotype _neatPhenotype;
         private Genotype _neatGenotype;
         private float[] _actions = {0f, 0f, 0f};
@@ -50,6 +51,11 @@ namespace NEAT
                 transform.eulerAngles.y, transform.localPosition.x, transform.localPosition.z, target.localPosition.x, target.localPosition.z,
                 victoryTarget.localPosition.x, victoryTarget.localPosition.z
             };
+            if (Vector3.Distance(transform.position, target.transform.position) > 10 && useDistance) // utiliser une distance de détection pour le joueur
+            {
+                input[3] = -100;
+                input[4] = -100;
+            }
             _actions = _neatPhenotype.Propagate(input); // on récupère la sortie
         }
 
