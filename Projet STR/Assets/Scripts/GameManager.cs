@@ -31,9 +31,12 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject player;
     [SerializeField] private GameObject[] enemies;
     [SerializeField] private GameObject victory;
+    [SerializeField] private GameObject victoryScreen;
+    [SerializeField] private GameObject defeatScreen;
     private Vector3[] _validPositions;
     private float distProche;
     [SerializeField] private bool isTraining;
+    
 
     public static event Action<GameState> OnGameStateChanged;
 
@@ -127,6 +130,7 @@ public class GameManager : MonoBehaviour
     
     private void Update()
     {
+        Debug.Log("State: --------->" + _state);
         if (isTraining) // En cas d'entrainement
         {
             float dist = Vector3.Distance(player.transform.position,
@@ -194,10 +198,12 @@ public class GameManager : MonoBehaviour
     public void PlayerWon()
     {
         Debug.Log("Le joueur a gagné");
-       
+
         if (!isTraining)
-            
-            Restart();
+        {
+            victoryScreen.SetActive(true);
+            return;
+        }
         else
         {
             //update fitness
@@ -221,9 +227,12 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("Le joueur a perdu");
         //update fitness
-        
+
         if (!isTraining)
-            Restart();
+        {
+            defeatScreen.SetActive(true);
+            return;
+        }
         else
         {
             enemies[0].GetComponent<NeatAgent>().Reward(10000);
