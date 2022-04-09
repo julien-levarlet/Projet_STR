@@ -202,6 +202,7 @@ MonoBehaviour:
   speed: 500
   rotSpeed: 300
   target: {fileID: 0}
+  life: 0
 --- !u!54 &4559037450308355571
 Rigidbody:
   m_ObjectHideFlags: 0

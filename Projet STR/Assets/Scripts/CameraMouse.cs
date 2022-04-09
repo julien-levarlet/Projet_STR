@@ -8,16 +8,16 @@ using UnityEngine.Serialization;
 /// </summary>
 public class CameraMouse : MonoBehaviour
 {
-    [SerializeField] private float speedH = 2.0f;
-    [SerializeField] private float speedV = 2.0f;
+    [SerializeField] private float speedH = 4.0f;
+    [SerializeField] private float speedV = 4.0f;
 
-    [SerializeField] private float pitch = 10f;
+    [SerializeField] private float pitch = 20f;
     [SerializeField] private float yaw = 0f;
 
     void Update()
     {
-        yaw -= speedH * Input.GetAxis("Mouse X");
-        pitch += speedV * Input.GetAxis("Mouse Y");
+        yaw += speedH * Input.GetAxis("Mouse X");
+        pitch -= speedV * Input.GetAxis("Mouse Y");
 
         transform.eulerAngles = new Vector3(pitch, yaw, 0.0f);
     }
