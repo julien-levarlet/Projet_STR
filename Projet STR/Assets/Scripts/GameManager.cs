@@ -1,7 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using NEAT;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
@@ -33,8 +30,12 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject victory;
     private Vector3[] _validPositions;
     private float initDistPlayer; // distance initiale entre le joueur et l'objectif
-    private float initDistEnemy; // distance 
+    private float initDistEnemy; // distance initiale entre l'ennemi et le joueur
+    private float initDistEnemyObj;
+    private float rewTime=0;
+    private int life = AgentController.MaxLife;
     [SerializeField] private bool isTraining;
+    [SerializeField] private float _beginTime;
 
     public static event Action<GameState> OnGameStateChanged;
 
@@ -44,7 +45,9 @@ public class GameManager : MonoBehaviour
         //player = GameObject.Find("Player");
         //enemies = GameObject.FindGameObjectsWithTag("Enemy");
         //var positions = GameObject.FindGameObjectsWithTag("Spawn");
+        initDistEnemy  = Vector3.Distance(enemies[0].transform.position,player.transform.position);
         initDistPlayer = Vector3.Distance(player.transform.position,victory.gameObject.transform.position);
+        initDistEnemyObj = Vector3.Distance(enemies[0].transform.position,victory.gameObject.transform.position);
 
         _validPositions = new Vector3[spawns.Length];
         
@@ -79,6 +82,7 @@ public class GameManager : MonoBehaviour
         }
 
         SetPositions();
+        _beginTime = Time.time;
     }
 
     private void Restart()
@@ -108,15 +112,18 @@ public class GameManager : MonoBehaviour
         }*/
 
         int index=0;
-        for (; index < enemies.Length; ++index)
-        {
-            enemies[index].GetComponent<AgentController>().SetPos(_validPositions[index]);
+        player.GetComponent<AgentController>().SetPos(_validPositions[index]);
+        index++;
+        for (; index < enemies.Length+1; ++index)
+        {   
+            //Debug.Log(enemies.Length);
+            enemies[index-1].GetComponent<AgentController>().SetPos(_validPositions[index]);
         }
 
-        player.GetComponent<AgentController>().SetPos(_validPositions[index]);
+        //player.GetComponent<AgentController>().SetPos(_validPositions[index]);
         
         // placement du point de victoire
-        victory.transform.position = _validPositions[++index];
+        victory.transform.position = _validPositions[index];
     }
     
     private void Update()
@@ -126,8 +133,9 @@ public class GameManager : MonoBehaviour
             float dist = Vector3.Distance(player.transform.position,
                 victory.gameObject.transform.position);
             if (initDistPlayer > dist)
-            {
-                player.GetComponent<NeatAgent>().Reward((initDistPlayer - dist)*10);
+            {   
+                player.GetComponent<NeatAgent>().Reward((initDistPlayer+ - dist)*10);
+                rewTime += (initDistPlayer + -dist) * 10;
                 //initDistPlayer = dist;
             }
 
@@ -135,12 +143,26 @@ public class GameManager : MonoBehaviour
             if (initDistEnemy > dist)
             {
                 enemies[0].GetComponent<NeatAgent>().Reward((initDistEnemy - dist)*10);
-                //initDistPlayer = dist;
             }
             
-            //donne des points à l'ennemi en fonction du temps et plus le joueur est blessé
-            //enemies[0].GetComponent<NeatAgent>().Reward(2);
-            enemies[0].GetComponent<NeatAgent>().Reward(3*(AgentController.MaxLife-player.GetComponent<AgentController>().life));
+            dist = Vector3.Distance(enemies[0].transform.position, victory.gameObject.transform.position);
+            if (initDistEnemyObj> dist)
+            {
+                enemies[0].GetComponent<NeatAgent>().Reward((initDistEnemyObj - dist)*3);
+            }
+            
+            //donne des points à l'ennemi  plus le joueur est blessé
+            if (player.GetComponent<NeatAgent>().life < life)
+            {
+                life = player.GetComponent<NeatAgent>().life;
+                enemies[0].GetComponent<NeatAgent>().Reward(20000);
+            }
+            //donne des points à l'ennemi si il est en vie :
+            if (enemies[0].GetComponent<NeatAgent>().life > 0)
+            {
+                enemies[0].GetComponent<NeatAgent>().Reward(2);
+            }
+            //enemies[0].GetComponent<NeatAgent>().Reward(10*(AgentController.MaxLife-player.GetComponent<AgentController>().life));
         
             //donne des points au joueur tant qu'il n'est pas blessé
             //if (player.GetComponent<AgentController>().life==AgentController.MaxLife)
@@ -202,9 +224,11 @@ public class GameManager : MonoBehaviour
         else
         {
             //update fitness
-            player.GetComponent<NeatAgent>().Reward(10000);
+            player.GetComponent<NeatAgent>().Reward(100000);
 
             //reward joueur avec le temps
+            player.GetComponent<NeatAgent>().Reward(rewTime*2);
+            print(Time.time-_beginTime);
             // playerr.Reward(1000/Temps passé);
             for (int i = 0; i < enemies.Length; i++)
             {
@@ -228,8 +252,6 @@ public class GameManager : MonoBehaviour
             Restart();
         else
         {
-            enemies[0].GetComponent<NeatAgent>().Reward(10000);
-
             for (int i = 0; i < enemies.Length; i++)
             {
                 if (enemies[i].GetComponent<AgentController>().life <= 0)
@@ -257,7 +279,7 @@ public class GameManager : MonoBehaviour
     {
         var agent = other.gameObject.GetComponent<AgentController>();
         if (agent != null)
-        {
+        {   
             agent.TakeHit();
             agent.ResetPos();
         }

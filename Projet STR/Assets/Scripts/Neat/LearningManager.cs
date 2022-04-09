@@ -157,7 +157,7 @@ namespace NEAT
             }
             else
             {
-                Time.timeScale = 10;
+                Time.timeScale = 5;
             }
 
             if (Input.GetKeyDown(KeyCode.S) || _playerPopulation.GENERATION % 50 == 0) // enregistrement des IAs
