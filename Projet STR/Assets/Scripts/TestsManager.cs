@@ -27,7 +27,7 @@ public class TestsManager : MonoBehaviour
 	{
 		_fpsValues = new float[1000];
 		_fpsIndex = -1;
-		Application.targetFrameRate = 61;
+		Application.targetFrameRate = 60;
 	}
 
 	void Awake()  // à l'instanciation 
