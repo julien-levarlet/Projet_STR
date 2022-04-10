@@ -13,12 +13,11 @@ using Pathfinding;
 public class AstarAgent : MonoBehaviour
 {
     public Transform target;
-    public NavMeshAgent navMeshAgent;
+    private NavMeshAgent navMeshAgent;
     private Seeker _seeker;
     /* Patrol */
     private bool _onPatrol;
     private bool _playerCaught;
-    private float _distance;
     [Range(0,100)] public float walkSPeed = 3;
     [Range(0,100)] public float runSpeed = 5;
     [Range(1, 500)] public float walkRadius;
@@ -35,50 +34,47 @@ public class AstarAgent : MonoBehaviour
     public Path path;
     public float speed = 2;
     public float nextWaypointDistance = 3;
-    private int currentWaypoint = 0;
-    public bool reachedEndOfPath;
+    private int currentWaypoint;
+    private bool reachedEndOfPath = false;
+    private float lastRefleshTime;
 
     public void Start()
     {
         _seeker = GetComponent<Seeker>();
+        _seeker.pathCallback += OnPathComplete;
+        navMeshAgent = GetComponent<NavMeshAgent>();
         _onPatrol = true;
         _playerCaught = false;
     }
 
     public void Update()
     {
+        bool condition = true; // condition pour refaire le calcul complet du chemin
+        if (condition)
+        {
+            
+        }
         if (IsPlayerInsight() && !IsPlayerReachable())
         {
             _onPatrol = false;
             //A remplacer avec A*
             _seeker.StartPath(transform.position, target.position);
-            if (path == null) Patroling();
+            if (path == null)
+            {
+                Debug.Log("oups");
+                Patroling();
+            }
             else
             {
-                float distanceToWaypoint;
-                currentWaypoint = 0;
-                while (true) {
-                    // If you want maximum performance you can check the squared distance instead to get rid of a
-                    // square root calculation. But that is outside the scope of this tutorial.
-                    distanceToWaypoint = Vector3.Distance(transform.position, path.vectorPath[currentWaypoint]);
-                    if (distanceToWaypoint < nextWaypointDistance) {
-                        // Check if there is another waypoint or if we have reached the end of the path
-                        if (currentWaypoint + 1 < path.vectorPath.Count) {
-                            currentWaypoint++;
-                        } else {
-                            // Set a status variable to indicate that the agent has reached the end of the path.
-                            // You can use this to trigger some special code if your game requires that.
-                            reachedEndOfPath = true;
-                            break;
-                        }
-                    } else {
-                        break;
-                    }
+                if (Time.time - lastRefleshTime >= 1)
+                {
+                    //TestsManager.GetInstance().EndReaction();
+                    //TestsManager.GetInstance().BeginReaction();
+                    _seeker.StartPath(transform.position, target.position);
+                    lastRefleshTime = Time.time;
                 }
-
-                navMeshAgent.SetDestination(path.vectorPath[currentWaypoint]);
+                AstarPath();
             }
-
         }
         else if(AttackCondition())
         {
@@ -95,9 +91,34 @@ public class AstarAgent : MonoBehaviour
         }
     }
 
-    private void OnPathComplete()
+    private void AstarPath()
     {
-        
+        float distanceToWaypoint;
+        currentWaypoint = 0;
+        while (true) {
+            // If you want maximum performance you can check the squared distance instead to get rid of a
+            // square root calculation. But that is outside the scope of this tutorial.
+            distanceToWaypoint = Vector3.Distance(transform.position, path.vectorPath[currentWaypoint]);
+            if (distanceToWaypoint < nextWaypointDistance) {
+                // Check if there is another waypoint or if we have reached the end of the path
+                if (currentWaypoint + 1 < path.vectorPath.Count) {
+                    currentWaypoint++;
+                } else {
+                    // Set a status variable to indicate that the agent has reached the end of the path.
+                    // You can use this to trigger some special code if your game requires that.
+                    reachedEndOfPath = true;
+                    break;
+                }
+            } else {
+                break;
+            }
+        }
+        navMeshAgent.SetDestination(path.vectorPath[currentWaypoint]);
+    }
+
+    private void OnPathComplete(Path p)
+    {
+        path = p;
     }
 
     //////////////////////////////////////////*  Chase *//////////////////////////////////////// 
@@ -120,7 +141,7 @@ public class AstarAgent : MonoBehaviour
     public bool IsPlayerInsight()
     {
         Vector3 toTarget = target.position - transform.position;
-        if (Vector3.Angle(transform.forward, toTarget) <= viewAngle){
+        //if (Vector3.Angle(transform.forward, toTarget) <= viewAngle){
             if (Physics.Raycast(transform.position, toTarget, out RaycastHit hit, 15))
             {
                 if (hit.transform.root == target)
@@ -132,7 +153,7 @@ public class AstarAgent : MonoBehaviour
                 {
                     playerInSight = false;
                 }
-            }
+            //}
         }
         else
         {
@@ -145,14 +166,12 @@ public class AstarAgent : MonoBehaviour
     /* Fonction qui vérifie si le joueur est atteignable pour attaquer */
     public bool IsPlayerReachable()
     {
-        return (_distance <= 1.5f);
+        return ((Vector3.Distance(transform.position, target.position)) <= 1.5f);
     }
     #endregion
     
     
     //////////////////////////////////////////*  Patrouille *////////////////////////////////////////
-
-    #region Patrouille
 
     private void Move(float speed)
     {
@@ -192,6 +211,4 @@ public class AstarAgent : MonoBehaviour
         }
     }
 
-    #endregion
-    
 }
