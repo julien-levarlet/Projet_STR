@@ -148,13 +148,24 @@ public class GameManager : MonoBehaviour
                 //player.GetComponent<NeatAgent>().Reward(3);
             }
         }
+        else
+        {
+            // contrainte de brieveté
+            for (int i = 0; i < enemies.Length; ++i)
+            {
+                if (Vector3.Distance(player.transform.position, enemies[i].transform.position) < 10)
+                {
+                    TestsManager.GetInstance().BeginDetection();
+                }
+            }
 
-        // redemarrage de la position des agents
-        if (Input.GetKey(KeyCode.P))
-            SetPositions();
-        // redemarrage de la partie
-        if (Input.GetKey(KeyCode.R))
-            Restart();
+            // redemarrage de la position des agents
+            if (Input.GetKey(KeyCode.P))
+                SetPositions();
+            // redemarrage de la partie
+            if (Input.GetKey(KeyCode.R))
+                Restart();
+        }
 
         // verifier si le joueur est mort
         if (!player.activeSelf)

@@ -56,7 +56,15 @@ namespace NEAT
                 input[3] = -100;
                 input[4] = -100;
             }
+            else
+            {
+                TestsManager.GetInstance().EndDetection();
+            }
             _actions = _neatPhenotype.Propagate(input); // on récupère la sortie
+            
+            // le temps de réaction est l'écart entre deux temps de "réflexion"
+            TestsManager.GetInstance().EndReaction();
+            TestsManager.GetInstance().BeginReaction();
         }
 
         public override bool AttackCondition()

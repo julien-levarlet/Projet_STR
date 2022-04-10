@@ -18,6 +18,7 @@ public class TestsManager : MonoBehaviour
 	public TextMeshProUGUI fpsText;
 	
 	private const int NbValuesStored = 1000;
+	private const float Epsilon = 0.01f;
 
 	// Vérifiaction de la contraite de nombre d'images par seconde
 	private int _fpsIndex;
@@ -37,6 +38,11 @@ public class TestsManager : MonoBehaviour
 	
 	// instance du singleton
 	private static TestsManager _instance;
+
+	public static TestsManager GetInstance()
+	{
+		return _instance;
+	}
 
 	private void Start()
 	{
@@ -77,34 +83,45 @@ public class TestsManager : MonoBehaviour
 	/// <summary>
 	/// A appeler quand le joueur entre dans le rayon d'action de l'ennemi
 	/// </summary>
-	private void BeginDetection()
+	public void BeginDetection()
 	{
+		if (!IsZero(_beginDetectionTime))
+			return;
+		Debug.Log("begindetection");
 		_beginDetectionTime = Time.time;
 	}
 
 	/// <summary>
 	/// A appeler quand l'ennemi à détecté le joueur
 	/// </summary>
-	private void EndDetection()
+	public void EndDetection()
 	{
+		if (IsZero(_beginDetectionTime))
+			return;
+		Debug.Log("enddetection");
 		var detectionTime = Time.time - _beginDetectionTime;
 		_detectionIndex = (_detectionIndex + 1) % NbValuesStored;
 		_detectionValues[_detectionIndex] = detectionTime;
+		_beginDetectionTime = 0;
 	}
 	
 	/// <summary>
 	/// A appeler quand le joueur fait une action
 	/// </summary>
-	private void BeginReaction()
+	public void BeginReaction()
 	{
+		Debug.Log("Beginreaction");
 		_beginReationTime = Time.time;
 	}
 
 	/// <summary>
 	/// A appeler quand l'ennemi réagit à l'action du joueur
 	/// </summary>
-	private void EndReaction()
+	public void EndReaction()
 	{
+		if (IsZero(_beginReationTime))
+			return;
+		Debug.Log("endreaction");
 		var reactionTime = Time.time - _beginReationTime;
 		_reactionIndex = (_reactionIndex + 1) % NbValuesStored;
 		_reactionValues[_reactionIndex] = reactionTime;
@@ -125,5 +142,12 @@ public class TestsManager : MonoBehaviour
 				_detectionValues[i].ToString(CultureInfo.InvariantCulture));
 		}
 		Debug.Log("Valeurs enregistrées");
+	}
+
+	public static bool IsZero(float value)
+	{
+		if (value < Epsilon && value > -Epsilon)
+			return true;
+		return false;
 	}
 }
