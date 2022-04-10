@@ -14,7 +14,7 @@ using UnityEngine.Serialization;
 [RequireComponent(typeof(BoxCollider))]
 public abstract class AgentController : MonoBehaviour
 {    
-    [SerializeField] private float speed = 500;
+    [SerializeField] protected float speed = 500;
     [SerializeField] private float rotSpeed = 300;
     [SerializeField] public Transform target;
     private Rigidbody _rb;
