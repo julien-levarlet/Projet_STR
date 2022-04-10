@@ -408,5 +408,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 349d70a6b6af47a4866b41748fbb7129, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  platformPrefab: {fileID: 7785005458672411800, guid: 62d53d737722438418a5079e67e24280, type: 3}
-  gameDuration: 10
+  populationSize: 200
+  platformPrefab: {fileID: 9209844078111654255, guid: f4b8efce3f6f7bf45a216196428f692a, type: 3}
+  gameDuration: 20

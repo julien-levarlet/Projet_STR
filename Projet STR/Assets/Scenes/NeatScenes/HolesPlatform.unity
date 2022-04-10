@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -355,6 +355,26 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 1511634704532267262, guid: 5e8edcc407259df46b30c5a5cf2dcd46, type: 3}
   m_PrefabInstance: {fileID: 549859351}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &103277742
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 103277739}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78b4bc533e734e4abc505c35e75d6761, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 500
+  rotSpeed: 300
+  target: {fileID: 851387439}
+  life: 0
+  sceneName: HolesPlatform
+  isTraining: 0
+  victoryTarget: {fileID: 1096883079}
+  useDistance: 1
 --- !u!1001 &162391916
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -612,7 +632,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-112082
+  m_Name: pb_Mesh-630128
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -837,7 +857,8 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 8079543965085099849, guid: 5e8edcc407259df46b30c5a5cf2dcd46, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 5e8edcc407259df46b30c5a5cf2dcd46, type: 3}
 --- !u!1 &452464938 stripped
 GameObject:
@@ -911,7 +932,8 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 8079543965085099849, guid: 5e8edcc407259df46b30c5a5cf2dcd46, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 5e8edcc407259df46b30c5a5cf2dcd46, type: 3}
 --- !u!1001 &617294069
 PrefabInstance:
@@ -1138,13 +1160,33 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 1511634704532267262, guid: 5e8edcc407259df46b30c5a5cf2dcd46, type: 3}
   m_PrefabInstance: {fileID: 365383409}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &721400751
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 721400750}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78b4bc533e734e4abc505c35e75d6761, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 500
+  rotSpeed: 300
+  target: {fileID: 851387439}
+  life: 0
+  sceneName: HolesPlatform
+  isTraining: 0
+  victoryTarget: {fileID: 1096883079}
+  useDistance: 1
 --- !u!43 &782193746
 Mesh:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-112230
+  m_Name: pb_Mesh-630276
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -1381,6 +1423,11 @@ PrefabInstance:
       objectReference: {fileID: 782193746}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1226a755f9bf67e408f8aa3cd685c6f9, type: 3}
+--- !u!4 &851387439 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1511634704532267234, guid: 1226a755f9bf67e408f8aa3cd685c6f9, type: 3}
+  m_PrefabInstance: {fileID: 851387438}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &856424847
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1523,7 +1570,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-112142
+  m_Name: pb_Mesh-630188
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -1992,6 +2039,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3a3809204e82edd419681ddd890ec67c, type: 3}
+--- !u!4 &1096883079 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1818299809222512868, guid: 3a3809204e82edd419681ddd890ec67c, type: 3}
+  m_PrefabInstance: {fileID: 1096883078}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1114300786
 PrefabInstance:
   m_ObjectHideFlags: 0

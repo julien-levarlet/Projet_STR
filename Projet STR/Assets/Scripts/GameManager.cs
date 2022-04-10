@@ -37,7 +37,7 @@ public class GameManager : MonoBehaviour
     private float rewTime=0;
     private int life = AgentController.MaxLife;
     [SerializeField] private bool isTraining;
-    [SerializeField] private float _beginTime;
+    private float _beginTime; // utilisation du temps pour le reward des joueurs
     
 
     public static event Action<GameState> OnGameStateChanged;
@@ -107,6 +107,7 @@ public class GameManager : MonoBehaviour
             en.GetComponent<AgentController>().life = AgentController.MaxLife;
         }
         
+        // L'affectation au point de spawn de manière aléatoire est retirée car trop problématique pour l'apprentissage des IAs
         /*var rnd = new Random();
         for (int i = 0;i < _validPositions.Length;++i)
         {
@@ -230,10 +231,9 @@ public class GameManager : MonoBehaviour
 
     public void PlayerWon()
     {
-        Debug.Log("Le joueur a gagné");
-
         if (!isTraining)
         {
+            Debug.Log("Le joueur a gagné");
             victoryScreen.SetActive(true);
             return;
         }
@@ -244,7 +244,6 @@ public class GameManager : MonoBehaviour
 
             //reward joueur avec le temps
             player.GetComponent<NeatAgent>().Reward(rewTime*2);
-            print(Time.time-_beginTime);
             // playerr.Reward(1000/Temps passé);
             for (int i = 0; i < enemies.Length; i++)
             {
@@ -261,28 +260,25 @@ public class GameManager : MonoBehaviour
 
     public void PlayerLost()
     {
-        Debug.Log("Le joueur a perdu");
         //update fitness
 
         if (!isTraining)
         {
+            Debug.Log("Le joueur a perdu");
             defeatScreen.SetActive(true);
             return;
         }
-        else
+        for (int i = 0; i < enemies.Length; i++)
         {
-            for (int i = 0; i < enemies.Length; i++)
+            if (enemies[i].GetComponent<AgentController>().life <= 0)
             {
-                if (enemies[i].GetComponent<AgentController>().life <= 0)
-                {
-                    player.GetComponent<NeatAgent>().Reward(50);
-                }
+                player.GetComponent<NeatAgent>().Reward(50);
             }
-            player.SetActive(false);
-            enemies[0].SetActive(false);
-            UpdateGameState(GameState.StageCleared);
         }
-    }
+        player.SetActive(false);
+        enemies[0].SetActive(false);
+        UpdateGameState(GameState.StageCleared);
+        }
 
     private void NotifyLearningManager()
     {

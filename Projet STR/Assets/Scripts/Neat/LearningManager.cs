@@ -103,7 +103,7 @@ namespace NEAT
         }
         private void InstantiatePlatforms()
         {
-            var gap = 50;
+            var gap = 70;
             var gridSize = 10;
             var maxX = gap * populationSize / gridSize / 2;
             var maxZ = gap * (gridSize - 1)/2;
@@ -133,7 +133,7 @@ namespace NEAT
         public void GameFinished()
         {
             _gameFinished += 1;
-            Debug.Log(_gameFinished+" parties finies");
+            // Debug.Log(_gameFinished+" parties finies");
         }
 
         private void Update()
@@ -157,7 +157,7 @@ namespace NEAT
             }
             else
             {
-                Time.timeScale = 5;
+                Time.timeScale = 10;
             }
 
             if (Input.GetKeyDown(KeyCode.S) || _playerPopulation.GENERATION % 50 == 0) // enregistrement des IAs

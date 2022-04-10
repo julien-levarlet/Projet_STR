@@ -87,7 +87,7 @@ public class TestsManager : MonoBehaviour
 	{
 		if (!IsZero(_beginDetectionTime))
 			return;
-		Debug.Log("begindetection");
+		//Debug.Log("begindetection");
 		_beginDetectionTime = Time.time;
 	}
 
@@ -98,7 +98,7 @@ public class TestsManager : MonoBehaviour
 	{
 		if (IsZero(_beginDetectionTime))
 			return;
-		Debug.Log("enddetection");
+		//Debug.Log("enddetection");
 		var detectionTime = Time.time - _beginDetectionTime;
 		_detectionIndex = (_detectionIndex + 1) % NbValuesStored;
 		_detectionValues[_detectionIndex] = detectionTime;
@@ -110,7 +110,7 @@ public class TestsManager : MonoBehaviour
 	/// </summary>
 	public void BeginReaction()
 	{
-		Debug.Log("Beginreaction");
+		//Debug.Log("Beginreaction");
 		_beginReationTime = Time.time;
 	}
 
@@ -121,7 +121,7 @@ public class TestsManager : MonoBehaviour
 	{
 		if (IsZero(_beginReationTime))
 			return;
-		Debug.Log("endreaction");
+		//Debug.Log("endreaction");
 		var reactionTime = Time.time - _beginReationTime;
 		_reactionIndex = (_reactionIndex + 1) % NbValuesStored;
 		_reactionValues[_reactionIndex] = reactionTime;
