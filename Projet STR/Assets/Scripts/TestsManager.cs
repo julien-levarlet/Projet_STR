@@ -50,7 +50,7 @@ public class TestsManager : MonoBehaviour
 		_reactionValues = new float[NbValuesStored];
 		_detectionValues = new float[NbValuesStored];
 		_fpsIndex = -1;
-		Application.targetFrameRate = 61;
+		Application.targetFrameRate = 60;
 	}
 
 	private void Awake()  // à l'instanciation 
