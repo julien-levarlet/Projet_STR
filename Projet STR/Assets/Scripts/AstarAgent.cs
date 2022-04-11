@@ -49,11 +49,6 @@ public class AstarAgent : MonoBehaviour
 
     public void Update()
     {
-        bool condition = true; // condition pour refaire le calcul complet du chemin
-        if (condition)
-        {
-            
-        }
         if (IsPlayerInsight() && !IsPlayerReachable())
         {
             _onPatrol = false;
@@ -61,15 +56,14 @@ public class AstarAgent : MonoBehaviour
             _seeker.StartPath(transform.position, target.position);
             if (path == null)
             {
-                Debug.Log("oups");
                 Patroling();
             }
             else
             {
                 if (Time.time - lastRefleshTime >= 1)
                 {
-                    //TestsManager.GetInstance().EndReaction();
-                    //TestsManager.GetInstance().BeginReaction();
+                    TestsManager.GetInstance().EndReaction();
+                    TestsManager.GetInstance().BeginReaction();
                     _seeker.StartPath(transform.position, target.position);
                     lastRefleshTime = Time.time;
                 }
@@ -141,19 +135,18 @@ public class AstarAgent : MonoBehaviour
     public bool IsPlayerInsight()
     {
         Vector3 toTarget = target.position - transform.position;
-        //if (Vector3.Angle(transform.forward, toTarget) <= viewAngle){
-            if (Physics.Raycast(transform.position, toTarget, out RaycastHit hit, 15))
+        if (Physics.Raycast(transform.position, toTarget, out RaycastHit hit, 15))
+        {
+            if (hit.transform.root == target)
             {
-                if (hit.transform.root == target)
-                {
-                    playerInSight = true;
-                    transform.LookAt(target.transform);
-                }
-                else
-                {
-                    playerInSight = false;
-                }
-            //}
+                TestsManager.GetInstance().EndReaction();
+                playerInSight = true;
+                transform.LookAt(target.transform);
+            }
+            else
+            {
+                playerInSight = false;
+            }
         }
         else
         {

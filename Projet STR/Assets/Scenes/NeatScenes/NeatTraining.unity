@@ -409,5 +409,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   populationSize: 200
-  platformPrefab: {fileID: 9209844078111654255, guid: f4b8efce3f6f7bf45a216196428f692a, type: 3}
+  platformPrefab: {fileID: 8236908437436311124, guid: 3ee09c0845cfaab4dabcd96e0dadf40b, type: 3}
   gameDuration: 20

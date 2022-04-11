@@ -237,25 +237,22 @@ public class GameManager : MonoBehaviour
             victoryScreen.SetActive(true);
             return;
         }
-        else
-        {
-            //update fitness
-            player.GetComponent<NeatAgent>().Reward(100000);
+        //update fitness
+        player.GetComponent<NeatAgent>().Reward(100000);
 
-            //reward joueur avec le temps
-            player.GetComponent<NeatAgent>().Reward(rewTime*2);
-            // playerr.Reward(1000/Temps passé);
-            for (int i = 0; i < enemies.Length; i++)
+        //reward joueur avec le temps
+        player.GetComponent<NeatAgent>().Reward(rewTime*2);
+        // playerr.Reward(1000/Temps passé);
+        for (int i = 0; i < enemies.Length; i++)
+        {
+            if (enemies[i].GetComponent<AgentController>().life == 0)
             {
-                if (enemies[i].GetComponent<AgentController>().life == 0)
-                {
-                    player.GetComponent<NeatAgent>().Reward(50);
-                }
+                player.GetComponent<NeatAgent>().Reward(50);
             }
-            player.SetActive(false);
-            enemies[0].SetActive(false);
-            UpdateGameState(GameState.StageCleared);
         }
+        player.SetActive(false);
+        enemies[0].SetActive(false);
+        UpdateGameState(GameState.StageCleared);
     }
 
     public void PlayerLost()

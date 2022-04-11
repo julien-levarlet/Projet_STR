@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.43673792, g: 0.4843489, b: 0.56460047, a: 1}
+  m_IndirectSpecularColor: {r: 0.43673843, g: 0.4843496, b: 0.56460154, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -748,6 +748,11 @@ MonoBehaviour:
 --- !u!1 &277311551 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4297920608735103153, guid: 3a3809204e82edd419681ddd890ec67c, type: 3}
+  m_PrefabInstance: {fileID: 807794899}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &277311552 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1818299809222512868, guid: 3a3809204e82edd419681ddd890ec67c, type: 3}
   m_PrefabInstance: {fileID: 807794899}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &280612405
@@ -2296,13 +2301,33 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 1511634704532267262, guid: 5e8edcc407259df46b30c5a5cf2dcd46, type: 3}
   m_PrefabInstance: {fileID: 2064029007}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1035279861
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1035279860}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78b4bc533e734e4abc505c35e75d6761, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 500
+  rotSpeed: 300
+  target: {fileID: 1345211881}
+  life: 0
+  sceneName: SlopeArena
+  isTraining: 0
+  victoryTarget: {fileID: 277311552}
+  useDistance: 1
 --- !u!43 &1094423602
 Mesh:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-91852
+  m_Name: pb_Mesh-398162
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -2830,6 +2855,11 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 1511634704532267262, guid: 1226a755f9bf67e408f8aa3cd685c6f9, type: 3}
   m_PrefabInstance: {fileID: 280612405}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &1345211881 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1511634704532267234, guid: 1226a755f9bf67e408f8aa3cd685c6f9, type: 3}
+  m_PrefabInstance: {fileID: 280612405}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1365138918
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2897,7 +2927,8 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 8079543965085099849, guid: 5e8edcc407259df46b30c5a5cf2dcd46, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 5e8edcc407259df46b30c5a5cf2dcd46, type: 3}
 --- !u!1001 &1382011153
 PrefabInstance:
@@ -2971,6 +3002,26 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 1511634704532267262, guid: 5e8edcc407259df46b30c5a5cf2dcd46, type: 3}
   m_PrefabInstance: {fileID: 1365138918}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1584809426
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1584809425}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78b4bc533e734e4abc505c35e75d6761, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 500
+  rotSpeed: 300
+  target: {fileID: 1345211881}
+  life: 0
+  sceneName: SlopeArena
+  isTraining: 0
+  victoryTarget: {fileID: 277311552}
+  useDistance: 1
 --- !u!43 &1589811946
 Mesh:
   m_ObjectHideFlags: 0
@@ -3452,7 +3503,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-91944
+  m_Name: pb_Mesh-398254
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -4109,7 +4160,8 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 8079543965085099849, guid: 5e8edcc407259df46b30c5a5cf2dcd46, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 5e8edcc407259df46b30c5a5cf2dcd46, type: 3}
 --- !u!1001 &9035835655087361077
 PrefabInstance:
