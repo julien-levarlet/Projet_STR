@@ -149,6 +149,7 @@ MonoBehaviour:
   sceneName: Nom de la scene
   isTraining: 1
   victoryTarget: {fileID: 1039899223573211535}
+  useDistance: 0
 --- !u!1001 &1681409324965394795
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -583,6 +584,7 @@ MonoBehaviour:
   sceneName: SimplePlatform
   isTraining: 1
   victoryTarget: {fileID: 1039899223573211535}
+  useDistance: 0
 --- !u!1001 &5934604060776561004
 PrefabInstance:
   m_ObjectHideFlags: 0

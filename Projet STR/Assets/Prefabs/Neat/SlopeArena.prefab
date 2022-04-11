@@ -1498,7 +1498,7 @@ MonoBehaviour:
   sceneName: SlopeArena
   isTraining: 1
   victoryTarget: {fileID: 1502459064198093794}
-  useDistance: 1
+  useDistance: 0
 --- !u!1001 &5225416711303235366
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2047,4 +2047,4 @@ MonoBehaviour:
   sceneName: SlopeArena
   isTraining: 1
   victoryTarget: {fileID: 1502459064198093794}
-  useDistance: 1
+  useDistance: 0
