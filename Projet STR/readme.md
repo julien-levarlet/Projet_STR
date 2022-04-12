@@ -47,3 +47,7 @@ Pour faire ce projet, nous avons utilisé des bases exitantes
 de [arongranberg.com](https://arongranberg.com/astar/features)
 et du github [b2developer](https://github.com/b2developer/MonopolyNEAT).
 
+## Rapport
+
+Nos rapport (L00, L01 et L02) sont disponibles dans le dossier [Rapport](Rapport/)
+
