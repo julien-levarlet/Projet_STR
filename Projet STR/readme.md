@@ -1,14 +1,14 @@
 # Projet IFT 611-729
 
 
-L'objectif principal du projet consiste à créer une intelligence
-artificielle de jeu-vidéo capable de réagir aux actions du joueur
-sous la forme d’un ou plusieurs ennemis.
+L'objectif principal du projet consiste Ã  crÃ©er une intelligence
+artificielle de jeu-vidÃ©o capable de rÃ©agir aux actions du joueur
+sous la forme dâ€™un ou plusieurs ennemis.
 
-Ce projet est basé sur Unity 2020 et permet de faire s'affronter
-un joueur et une IA sur une variété de scènes disponibles.
+Ce projet est basÃ© sur Unity 2020 et permet de faire s'affronter
+un joueur et une IA sur une variÃ©tÃ© de scÃ¨nes disponibles.
 
-Les méthodes d'IA utilisées sont NEAT et A*, réutilisant du code 
+Les mÃ©thodes d'IA utilisÃ©es sont NEAT et A*, rÃ©utilisant du code 
 existant.
 
 ## Lancer une partie
@@ -16,34 +16,34 @@ existant.
 Pour lancer une partie, il faut aller dans le dossier 
 [Scene](Assets/Scenes).
 Ensuite dans le sous-dossier [NeatScene](Assets/Scenes/NeatScenes) 
-se trouve un variété de plateformes, avec comme ennemi, une IA
+se trouve une variÃ©tÃ© de plateformes, avec comme ennemi, une IA
 utilisant l'algorithme NEAT. <br>
 Dans le sous-dossier [AStarScenes](Assets/Scenes/AStarScene) 
-contient une scene WallArena_astar, présentant un exemple de 
+contient une scene WallArena_astar, prÃ©sentant un exemple de 
 fonctionnement de notre IA utilisant A*.
 
 ## Entrainement d'une IA
 
-Pour entrainer une IA basée sur NEAT, il faut utiliser la scène 
+Pour entrainer une IA basÃ©e sur NEAT, il faut utiliser la scÃ¨ne 
 [NeatTraining](Assets/Scenes/NeatScenes/NeatTraining.unity). 
 Pour choisir le type de plateforme sur laquelle entrainer 
 l'IA, il faut placer le prefab de cette scene dans le champ
-`platformPrefab` du `LearningManager` présent sur le GameObject
+`platformPrefab` du `LearningManager` prÃ©sent sur le GameObject
 `plane`.
 
-## Mesure de contraintes temps réel
+## Mesure de contraintes temps rÃ©el
 
-Pour enregistrer les contraintes temps réels mesurées dans 
-`TestManager`, il faut appuyer sur la touche M pendant l'exécution
+Pour enregistrer les contraintes temps rÃ©els mesurÃ©es dans 
+`TestManager`, il faut appuyer sur la touche M pendant l'exÃ©cution
 d'une partie. Cela enregistrera les temps dans [log.csv](log.csv).
 
 Ensuite, le jupyter notebook [visualisation.ipynb](Visualisation/visualisation.ipynb)
-permet de faire l'affichage des données temps réelles,
-comme présentés dans le rapport
+permet de faire l'affichage des donnÃ©es temps rÃ©elles,
+comme prÃ©sentÃ©s dans le rapport
 
-## Code existant utilisé
+## Code existant utilisÃ©
 
-Pour faire ce projet, nous avons utilisé des bases exitantes 
+Pour faire ce projet, nous avons utilisÃ© des bases existantes 
 de [arongranberg.com](https://arongranberg.com/astar/features)
 et du github [b2developer](https://github.com/b2developer/MonopolyNEAT).
 
